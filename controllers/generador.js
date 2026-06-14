@@ -281,6 +281,8 @@ ${JSON.stringify(datos, null, 2)}
 
 REQUISITOS:
 - Devuelve SOLO el código HTML completo, desde <!DOCTYPE html> hasta </html>. Sin explicaciones, sin texto antes ni después, sin markdown.
+- Incluye siempre un encabezado con el nombre de la iglesia y su lema, y un pie de página.
+- Si en los datos viene multimedia.logo (una imagen en base64), úsala como logo en el encabezado o la barra de navegación con una etiqueta img. Si viene multimedia.fotoPrincipal (base64), úsala como imagen de fondo o destacada en el encabezado principal (hero). Inserta estas imágenes directamente con su valor base64 en el atributo src.
 - Todo el CSS debe ir dentro de una etiqueta <style> en el <head>. No uses archivos externos ni dependencias.
 - Diseño moderno, limpio, profesional y totalmente responsivo (móvil y escritorio).
 - Incluye ÚNICAMENTE estas secciones: ${activas}.
