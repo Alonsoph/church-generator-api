@@ -1,5 +1,8 @@
 const axios = require('axios');
 
+// NOTA: Este archivo ahora usa DeepSeek en lugar de Claude.
+// DeepSeek es compatible con el formato de OpenAI.
+
 // ============================================
 // MODO 1: PLANTILLA FIJA (gratis, instantánea)
 // ============================================
@@ -284,30 +287,31 @@ REQUISITOS:
 - Usa una paleta de colores armoniosa y apropiada para una iglesia. Si los datos incluyen colores, úsalos.
 - El tono debe ser cálido, acogedor y espiritual.
 - Si hay WhatsApp, los botones de contacto deben enlazar a https://wa.me/ con el número.
-- Incluye siempre un encabezado con el nombre de la iglesia y su lema, y un pie de página.`;
-}
+- Incluye siempre un encabezado con el nombre de la iglesia y su lema, y un pie de página.
+- Incluye una barra de navegación horizontal FIJA en la parte superior (position: sticky; top: 0) que contenga enlaces a cada sección de la página. Al hacer clic en un enlace, la página debe desplazarse suavemente (scroll-behavior: smooth) hasta esa sección. Cada sección debe tener un id que coincida con su enlace en el menú. La barra debe verse moderna, limpia, con buen contraste y fondo sólido para que se lea bien al hacer scroll.
+- NO uses emojis en ninguna parte del diseño. En lugar de emojis, usa iconos SVG minimalistas inline, o simplemente texto y tipografía elegante. El diseño debe verse contemporáneo y profesional, no infantil.
+- Usa tipografía moderna, espaciado generoso (mucho espacio en blanco), sombras suaves y esquinas redondeadas sutiles. Inspírate en el diseño web actual de 2026.`;}
 
-async function generarConClaude(datos) {
+async function generarConIA(datos) {
   const prompt = construirPrompt(datos);
 
   const response = await axios.post(
-    'https://api.anthropic.com/v1/messages',
+    'https://api.deepseek.com/chat/completions',
     {
-      model: 'claude-sonnet-4-6',
+      model: 'deepseek-chat',
       max_tokens: 8000,
       messages: [{ role: 'user', content: prompt }],
     },
     {
       headers: {
-        'x-api-key': process.env.CLAUDE_API_KEY,
-        'anthropic-version': '2023-06-01',
+        'Authorization': `Bearer ${process.env.DEEPSEEK_API_KEY}`,
         'content-type': 'application/json',
       },
     }
   );
 
-  let html = response.data.content[0].text;
-  // Limpieza por si Claude envuelve en markdown
+  let html = response.data.choices[0].message.content;
+  // Limpieza por si el modelo envuelve en markdown
   html = html.replace(/```html/g, '').replace(/```/g, '').trim();
   return html;
 }
@@ -321,7 +325,7 @@ exports.generarPagina = async (req, res) => {
     let html;
 
     if (usarIA) {
-      html = await generarConClaude(req.body);
+      html = await generarConIA(req.body);
     } else {
       html = construirHTML(req.body);
     }
