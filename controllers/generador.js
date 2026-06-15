@@ -273,11 +273,19 @@ function construirPrompt(datos) {
   const func = datos.funcionalidades_activas || {};
   const activas = Object.keys(func).filter((k) => func[k]).join(', ');
 
+  const datosParaPrompt = {
+    ...datos,
+    multimedia: {
+      logo: datos.multimedia?.logo ? 'LOGO_BASE64_PLACEHOLDER' : '',
+      fotoPrincipal: datos.multimedia?.fotoPrincipal ? 'FOTO_PRINCIPAL_BASE64_PLACEHOLDER' : '',
+    }
+  };
+
   return `Eres un experto diseñador web especializado en sitios para iglesias evangélicas.
 Genera una página web HTML completa, moderna y responsiva para la siguiente iglesia.
 
 DATOS DE LA IGLESIA (en JSON):
-${JSON.stringify(datos, null, 2)}
+${JSON.stringify(datosParaPrompt, null, 2)}
 
 REQUISITOS:
 - Devuelve SOLO el código HTML completo, desde <!DOCTYPE html> hasta </html>. Sin explicaciones, sin texto antes ni después, sin markdown.
@@ -315,8 +323,15 @@ async function generarConIA(datos) {
   let html = response.data.choices[0].message.content;
   // Limpieza por si el modelo envuelve en markdown
   html = html.replace(/```html/g, '').replace(/```/g, '').trim();
+  // Insertar imágenes reales en lugar de placeholders
+  if (datos.multimedia?.logo) {
+    html = html.replace('LOGO_BASE64_PLACEHOLDER', datos.multimedia.logo);
+  }
+  if (datos.multimedia?.fotoPrincipal) {
+    html = html.replace('FOTO_PRINCIPAL_BASE64_PLACEHOLDER', datos.multimedia.fotoPrincipal);
+  }
   return html;
-}
+  }
 
 // ============================================
 // CONTROLADORES
