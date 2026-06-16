@@ -308,7 +308,7 @@ async function generarConIA(datos) {
   const response = await axios.post(
     'https://api.deepseek.com/chat/completions',
     {
-      model: 'deepseek-chat',
+      model: process.env.DEEPSEEK_MODEL || 'deepseek-chat',
       max_tokens: 8000,
       messages: [{ role: 'user', content: prompt }],
     },
