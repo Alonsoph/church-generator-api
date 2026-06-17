@@ -327,7 +327,8 @@ REGLAS ESTRICTAS:
 - NO uses emojis. Solo iconos SVG inline minimalistas (linear-style, stroke 1.5).
 - Responsivo: media queries para móvil (max-width: 768px).
 - Tono cálido, acogedor, espiritual pero contemporáneo (no anticuado).
-- Botones de WhatsApp enlazan a https://wa.me/${(redes.whatsapp || '').replace(/[^0-9]/g, '')}.`;
+- Botones de WhatsApp enlazan a https://wa.me/${(redes.whatsapp || '').replace(/[^0-9]/g, '')}.
+- Si incluyes un menú hamburguesa, DEBE ser funcional con CSS puro (truco del checkbox), no uses JavaScript ni dependas de él.`;
 }
 
 async function generarConIA(datos) {
