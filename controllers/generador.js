@@ -339,7 +339,7 @@ async function generarConIA(datos) {
     'https://api.groq.com/openai/v1/chat/completions',
     {
       model: 'llama-3.3-70b-versatile',
-      max_tokens: 8000,
+      max_tokens: 5000,
       messages: [{ role: 'user', content: prompt }],
     },
     {
