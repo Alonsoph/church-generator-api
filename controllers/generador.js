@@ -280,50 +280,77 @@ function construirPrompt(datos) {
   const tieneLogo = !!datos.multimedia?.logo;
   const tieneFoto = !!datos.multimedia?.fotoPrincipal;
 
-  return `Genera una página web HTML completa para una iglesia evangélica.
+  return `Eres un diseñador web senior especializado en sitios modernos y elegantes para iglesias evangélicas. Genera una página web HTML completa de alta calidad visual.
 
-DATOS:
+DATOS DE LA IGLESIA:
 - Nombre: ${iglesia.nombre || 'Iglesia'}
 - Lema: ${iglesia.lema || ''}
 - Dirección: ${ubicacion.direccion || ''}, ${ubicacion.ciudad || ''}
 - WhatsApp: ${redes.whatsapp || ''}
-${tieneLogo ? '- Logo: usar LOGO_BASE64_PLACEHOLDER en <img src="">' : ''}
-${tieneFoto ? '- Foto hero: usar FOTO_PRINCIPAL_BASE64_PLACEHOLDER como fondo del header' : ''}
+${tieneLogo ? '- Logo disponible: insertar como <img src="LOGO_BASE64_PLACEHOLDER" alt="Logo"> en la barra de navegación (altura ~50px)' : ''}
+${tieneFoto ? '- Foto hero disponible: usar url("FOTO_PRINCIPAL_BASE64_PLACEHOLDER") como background-image del header principal con overlay oscuro para legibilidad' : ''}
 
-SECCIONES A INCLUIR: ${activas}
+SECCIONES A INCLUIR (en este orden): ${activas}
 
-REQUISITOS:
-- Devuelve SOLO HTML completo desde <!DOCTYPE html> hasta </html>. Sin markdown, sin explicaciones.
-- Todo el CSS dentro de <style> en el <head>.
-- Diseño moderno 2026: tipografía limpia, espaciado generoso, sombras suaves, esquinas redondeadas, responsivo.
-- Barra de navegación sticky arriba con scroll suave a cada sección (cada sección con id).
-- Sin emojis. Usa iconos SVG inline minimalistas o solo tipografía.
-- Tono cálido y espiritual.
-- Botones de WhatsApp deben enlazar a https://wa.me/ con el número.
-- Incluye header con nombre+lema y footer.`;
+ESTILO VISUAL (muy importante):
+- Diseño contemporáneo 2026, estilo editorial moderno, inspirado en sitios como Linear, Stripe, Apple.
+- Paleta de colores armoniosa y profesional. Sugerencia: azules profundos (#1e3a5f, #2c5aa0) combinados con un acento cálido (dorado #d4a574 o terracota #c87456). Fondos blancos o crema (#fafaf7) para secciones, gris muy claro (#f4f4f0) para alternar.
+- Tipografía: usa Google Fonts. Para títulos: "Playfair Display" o "Cormorant Garamond" (elegante serif). Para texto: "Inter" o "DM Sans" (sans-serif limpia). Incluye el link en el <head>.
+- Espaciado MUY generoso. Padding vertical de secciones mínimo 80px en desktop. Mucho aire entre elementos.
+- Jerarquía tipográfica clara: títulos grandes (3-4em), subtítulos medianos, texto cómodo (1.05em, line-height 1.7).
+- Sombras suaves y modernas: box-shadow: 0 10px 40px rgba(0,0,0,0.06).
+- Bordes redondeados sutiles (border-radius: 12px en cards, 8px en botones).
+- Transiciones suaves en hover (transition: all 0.3s ease).
+- Cards con hover effect que las eleve ligeramente (transform: translateY(-4px)).
+
+ESTRUCTURA:
+- Barra de navegación STICKY en top, con fondo semi-transparente y blur (backdrop-filter: blur(10px)), enlaces a cada sección con scroll suave (scroll-behavior: smooth en html).
+- Header principal (hero): pantalla grande con nombre + lema, botón CTA destacado. Si hay fotoPrincipal, úsala como background con overlay rgba(0,0,0,0.5).
+- Cada sección con id matching del menú nav.
+- Footer elegante con info de contacto y redes.
+
+CONTENIDO POR SECCIÓN (si están activas):
+- horarios_ubicacion: 3 cards con horarios reales (Domingo servicio, Miércoles estudio bíblico, Viernes oración) + caja con dirección.
+- biblioteca_sermones: grid de 3-4 sermones con título inventado coherente, predicador, botón "Escuchar".
+- calendario_eventos: 3 eventos próximos con fecha estilizada (día grande, mes pequeño) y descripción.
+- transmision_vivo: placeholder de video grande con texto explicativo.
+- ministerios: grid de 3 cards (Jóvenes, Infantil, Música) con descripción y líder.
+- formulario_contacto: form moderno con nombre, email, mensaje + botón WhatsApp destacado verde.
+- pagina_nuevos_visitantes: 4 pasos numerados acogedores.
+- donaciones: explicación cálida + métodos de donación + botón.
+- galeria_fotos: grid de 6 placeholders de fotos.
+- blog_devocionales: 3 posts con fecha, título y "Leer más".
+- redes_sociales: iconos SVG inline de redes sociales.
+
+REGLAS ESTRICTAS:
+- Devuelve SOLO HTML completo desde <!DOCTYPE html> hasta </html>. Sin markdown, sin \`\`\`, sin explicaciones antes ni después.
+- Todo el CSS dentro de <style> en el <head>. Sin archivos externos excepto Google Fonts.
+- NO uses emojis. Solo iconos SVG inline minimalistas (linear-style, stroke 1.5).
+- Responsivo: media queries para móvil (max-width: 768px).
+- Tono cálido, acogedor, espiritual pero contemporáneo (no anticuado).
+- Botones de WhatsApp enlazan a https://wa.me/${(redes.whatsapp || '').replace(/[^0-9]/g, '')}.`;
 }
+
 async function generarConIA(datos) {
   const prompt = construirPrompt(datos);
 
   const response = await axios.post(
-    'https://api.deepseek.com/chat/completions',
+    'https://api.groq.com/openai/v1/chat/completions',
     {
-      model: process.env.DEEPSEEK_MODEL || 'deepseek-chat',
+      model: 'llama-3.3-70b-versatile',
       max_tokens: 8000,
       messages: [{ role: 'user', content: prompt }],
     },
     {
       headers: {
-        'Authorization': `Bearer ${process.env.DEEPSEEK_API_KEY}`,
+        'Authorization': `Bearer ${process.env.GROQ_API_KEY}`,
         'content-type': 'application/json',
       },
     }
   );
 
   let html = response.data.choices[0].message.content;
-  // Limpieza por si el modelo envuelve en markdown
   html = html.replace(/```html/g, '').replace(/```/g, '').trim();
-  // Insertar imágenes reales en lugar de placeholders
   if (datos.multimedia?.logo) {
     html = html.replace('LOGO_BASE64_PLACEHOLDER', datos.multimedia.logo);
   }
@@ -331,7 +358,7 @@ async function generarConIA(datos) {
     html = html.replace('FOTO_PRINCIPAL_BASE64_PLACEHOLDER', datos.multimedia.fotoPrincipal);
   }
   return html;
-  }
+}
 
 // ============================================
 // CONTROLADORES
