@@ -336,7 +336,7 @@ async function generarConIA(datos) {
   const response = await axios.post(
     'https://api.groq.com/openai/v1/chat/completions',
     {
-      model: 'llama-3.3-70b-versatile',
+      model: 'deepseek-r1-distill-llama-70b',
       max_tokens: 5000,
       messages: [{ role: 'user', content: prompt }],
     },
