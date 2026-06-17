@@ -305,6 +305,7 @@ ESTILO VISUAL (muy importante):
 
 ESTRUCTURA:
 - Barra de navegación STICKY en top, con fondo semi-transparente y blur (backdrop-filter: blur(10px)), enlaces a cada sección con scroll suave (scroll-behavior: smooth en html).
+- La barra de navegación debe tener altura máxima de 70px. Cada sección debe usar scroll-margin-top: 80px para que al hacer scroll suave, el contenido no quede oculto detrás de la barra.
 - Header principal (hero): pantalla grande con nombre + lema, botón CTA destacado. Si hay fotoPrincipal, úsala como background con overlay rgba(0,0,0,0.5).
 - Cada sección con id matching del menú nav.
 - Footer elegante con info de contacto y redes.
