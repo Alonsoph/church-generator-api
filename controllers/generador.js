@@ -304,16 +304,14 @@ ESTILO VISUAL (muy importante):
 - Cards con hover effect que las eleve ligeramente (transform: translateY(-4px)).
 
 ESTRUCTURA:
-- Barra de navegación STICKY en top, con fondo semi-transparente y blur (backdrop-filter: blur(10px)), enlaces a cada sección con scroll suave (scroll-behavior: smooth en html).
-- La barra de navegación debe tener altura máxima de 70px. Cada sección debe usar scroll-margin-top: 80px para que al hacer scroll suave, el contenido no quede oculto detrás de la barra.
-- Header principal (hero): pantalla grande con nombre + lema, botón CTA destacado. Si hay fotoPrincipal, úsala como background con overlay rgba(0,0,0,0.5).
+- Barra de navegación STICKY en top con fondo sólido blanco u oscuro (NO transparente), altura fija de 70px, padding horizontal 24px. Los enlaces deben estar en una sola fila horizontal con flexbox (display: flex, gap: 24px), con scroll horizontal si no caben (overflow-x: auto). En móvil (max-width: 768px), la barra debe convertirse en un menú hamburguesa o quedarse en una fila con scroll horizontal — NUNCA en columna que cubra el contenido. Cada sección debe usar scroll-margin-top: 90px.
+- Scroll suave con scroll-behavior: smooth en html.- Header principal (hero): pantalla grande con nombre + lema, botón CTA destacado. Si hay fotoPrincipal, úsala como background con overlay rgba(0,0,0,0.5).
 - Cada sección con id matching del menú nav.
 - Footer elegante con info de contacto y redes.
 
 CONTENIDO POR SECCIÓN (si están activas):
 - horarios_ubicacion: 3 cards con horarios reales (Domingo servicio, Miércoles estudio bíblico, Viernes oración) + caja con dirección.
-- biblioteca_sermones: grid de 3-4 sermones con título inventado coherente, predicador, botón "Escuchar".
-- calendario_eventos: 3 eventos próximos con fecha estilizada (día grande, mes pequeño) y descripción.
+- biblioteca_sermones: grid de 3-4 PREDICACIONES (NO uses la palabra "sermón", usa "predicación" o "mensaje" porque el contexto es chileno). Cada una con título inventado coherente, predicador, botón "Escuchar".- calendario_eventos: 3 eventos próximos con fecha estilizada (día grande, mes pequeño) y descripción.
 - transmision_vivo: placeholder de video grande con texto explicativo.
 - ministerios: grid de 3 cards (Jóvenes, Infantil, Música) con descripción y líder.
 - formulario_contacto: form moderno con nombre, email, mensaje + botón WhatsApp destacado verde.
