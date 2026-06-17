@@ -273,35 +273,35 @@ function construirPrompt(datos) {
   const func = datos.funcionalidades_activas || {};
   const activas = Object.keys(func).filter((k) => func[k]).join(', ');
 
-  const datosParaPrompt = {
-    ...datos,
-    multimedia: {
-      logo: datos.multimedia?.logo ? 'LOGO_BASE64_PLACEHOLDER' : '',
-      fotoPrincipal: datos.multimedia?.fotoPrincipal ? 'FOTO_PRINCIPAL_BASE64_PLACEHOLDER' : '',
-    }
-  };
+  const iglesia = datos.iglesia || {};
+  const ubicacion = datos.ubicacion || {};
+  const redes = datos.redes_sociales || {};
 
-  return `Eres un experto diseñador web especializado en sitios para iglesias evangélicas.
-Genera una página web HTML completa, moderna y responsiva para la siguiente iglesia.
+  const tieneLogo = !!datos.multimedia?.logo;
+  const tieneFoto = !!datos.multimedia?.fotoPrincipal;
 
-DATOS DE LA IGLESIA (en JSON):
-${JSON.stringify(datosParaPrompt, null, 2)}
+  return `Genera una página web HTML completa para una iglesia evangélica.
+
+DATOS:
+- Nombre: ${iglesia.nombre || 'Iglesia'}
+- Lema: ${iglesia.lema || ''}
+- Dirección: ${ubicacion.direccion || ''}, ${ubicacion.ciudad || ''}
+- WhatsApp: ${redes.whatsapp || ''}
+${tieneLogo ? '- Logo: usar LOGO_BASE64_PLACEHOLDER en <img src="">' : ''}
+${tieneFoto ? '- Foto hero: usar FOTO_PRINCIPAL_BASE64_PLACEHOLDER como fondo del header' : ''}
+
+SECCIONES A INCLUIR: ${activas}
 
 REQUISITOS:
-- Devuelve SOLO el código HTML completo, desde <!DOCTYPE html> hasta </html>. Sin explicaciones, sin texto antes ni después, sin markdown.
-- Incluye siempre un encabezado con el nombre de la iglesia y su lema, y un pie de página.
-- Si en los datos viene multimedia.logo (una imagen en base64), úsala como logo en el encabezado o la barra de navegación con una etiqueta img. Si viene multimedia.fotoPrincipal (base64), úsala como imagen de fondo o destacada en el encabezado principal (hero). Inserta estas imágenes directamente con su valor base64 en el atributo src.
-- Todo el CSS debe ir dentro de una etiqueta <style> en el <head>. No uses archivos externos ni dependencias.
-- Diseño moderno, limpio, profesional y totalmente responsivo (móvil y escritorio).
-- Incluye ÚNICAMENTE estas secciones: ${activas}.
-- Usa una paleta de colores armoniosa y apropiada para una iglesia. Si los datos incluyen colores, úsalos.
-- El tono debe ser cálido, acogedor y espiritual.
-- Si hay WhatsApp, los botones de contacto deben enlazar a https://wa.me/ con el número.
-- Incluye siempre un encabezado con el nombre de la iglesia y su lema, y un pie de página.
-- Incluye una barra de navegación horizontal FIJA en la parte superior (position: sticky; top: 0) que contenga enlaces a cada sección de la página. Al hacer clic en un enlace, la página debe desplazarse suavemente (scroll-behavior: smooth) hasta esa sección. Cada sección debe tener un id que coincida con su enlace en el menú. La barra debe verse moderna, limpia, con buen contraste y fondo sólido para que se lea bien al hacer scroll.
-- NO uses emojis en ninguna parte del diseño. En lugar de emojis, usa iconos SVG minimalistas inline, o simplemente texto y tipografía elegante. El diseño debe verse contemporáneo y profesional, no infantil.
-- Usa tipografía moderna, espaciado generoso (mucho espacio en blanco), sombras suaves y esquinas redondeadas sutiles. Inspírate en el diseño web actual de 2026.`;}
-
+- Devuelve SOLO HTML completo desde <!DOCTYPE html> hasta </html>. Sin markdown, sin explicaciones.
+- Todo el CSS dentro de <style> en el <head>.
+- Diseño moderno 2026: tipografía limpia, espaciado generoso, sombras suaves, esquinas redondeadas, responsivo.
+- Barra de navegación sticky arriba con scroll suave a cada sección (cada sección con id).
+- Sin emojis. Usa iconos SVG inline minimalistas o solo tipografía.
+- Tono cálido y espiritual.
+- Botones de WhatsApp deben enlazar a https://wa.me/ con el número.
+- Incluye header con nombre+lema y footer.`;
+}
 async function generarConIA(datos) {
   const prompt = construirPrompt(datos);
 
