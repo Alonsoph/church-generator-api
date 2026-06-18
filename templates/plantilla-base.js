@@ -63,6 +63,7 @@ function generarPlantilla(datos, contenido) {
   return `<!DOCTYPE html>
 <html lang="es">
 <head>
+<base target="_self">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>${nombre}</title>
@@ -82,9 +83,7 @@ ${cssBase()}
     <label for="menu-toggle" class="hamburger">
       <span></span><span></span><span></span>
     </label>
-<div class="nav-links" onclick="if(event.target.tagName==='A'){document.getElementById('menu-toggle').checked=false;}">
-      ${navLinks}
-    </div>  </div>
+<div class="nav-links" onclick="if(event.target.tagName==='A'){event.preventDefault();var id=event.target.getAttribute('href').substring(1);var el=document.getElementById(id);if(el){el.scrollIntoView({behavior:'smooth'});}document.getElementById('menu-toggle').checked=false;}">      ${navLinks}    </div>  </div>
 </nav>
 
 <header class="hero" ${fotoPrincipal ? `style="background-image: linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.55)), url('${fotoPrincipal}')"` : ''}>
