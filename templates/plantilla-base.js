@@ -82,10 +82,9 @@ ${cssBase()}
     <label for="menu-toggle" class="hamburger">
       <span></span><span></span><span></span>
     </label>
-    <div class="nav-links">
+<div class="nav-links" onclick="if(event.target.tagName==='A'){document.getElementById('menu-toggle').checked=false;}">
       ${navLinks}
-    </div>
-  </div>
+    </div>  </div>
 </nav>
 
 <header class="hero" ${fotoPrincipal ? `style="background-image: linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.55)), url('${fotoPrincipal}')"` : ''}>
