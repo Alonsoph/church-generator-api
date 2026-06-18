@@ -83,8 +83,10 @@ ${cssBase()}
     <label for="menu-toggle" class="hamburger">
       <span></span><span></span><span></span>
     </label>
-<div class="nav-links" onclick="if(event.target.tagName==='A'){event.preventDefault();var id=event.target.getAttribute('href').substring(1);var el=document.getElementById(id);if(el){el.scrollIntoView({behavior:'smooth'});}document.getElementById('menu-toggle').checked=false;}">      ${navLinks}    </div>  </div>
-</nav>
+<div class="nav-links" onclick="if(event.target.tagName==='A'){document.getElementById('menu-toggle').checked=false;}">
+  ${navLinks}
+</div>
+</div></nav>
 
 <header class="hero" ${fotoPrincipal ? `style="background-image: linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.55)), url('${fotoPrincipal}')"` : ''}>
   <div class="hero-content">
