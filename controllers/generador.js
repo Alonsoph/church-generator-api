@@ -1,4 +1,5 @@
 const axios = require('axios');
+const { generarPlantilla } = require('../templates/plantilla-base');
 
 // NOTA: Este archivo ahora usa DeepSeek en lugar de Claude.
 // DeepSeek es compatible con el formato de OpenAI.
@@ -271,65 +272,78 @@ ${secciones}
 // ============================================
 function construirPrompt(datos) {
   const func = datos.funcionalidades_activas || {};
-  const activas = Object.keys(func).filter((k) => func[k]).join(', ');
-
   const iglesia = datos.iglesia || {};
-  const ubicacion = datos.ubicacion || {};
-  const redes = datos.redes_sociales || {};
+  
+  const seccionesActivas = [];
+  if (func.horarios_ubicacion) seccionesActivas.push('horarios');
+  if (func.biblioteca_sermones) seccionesActivas.push('predicaciones');
+  if (func.calendario_eventos) seccionesActivas.push('eventos');
+  if (func.transmision_vivo) seccionesActivas.push('transmision');
+  if (func.ministerios) seccionesActivas.push('ministerios');
+  if (func.pagina_nuevos_visitantes) seccionesActivas.push('nuevos');
+  if (func.donaciones) seccionesActivas.push('donaciones');
+  if (func.blog_devocionales) seccionesActivas.push('blog');
 
-  const tieneLogo = !!datos.multimedia?.logo;
-  const tieneFoto = !!datos.multimedia?.fotoPrincipal;
-
-  return `Eres un diseñador web senior especializado en sitios modernos y elegantes para iglesias evangélicas. Genera una página web HTML completa de alta calidad visual.
+  return `Eres un copywriter para iglesias evangélicas en Chile. Tu trabajo es generar SOLO el contenido textual para una web ya diseñada.
 
 DATOS DE LA IGLESIA:
 - Nombre: ${iglesia.nombre || 'Iglesia'}
 - Lema: ${iglesia.lema || ''}
-- Dirección: ${ubicacion.direccion || ''}, ${ubicacion.ciudad || ''}
-- WhatsApp: ${redes.whatsapp || ''}
-${tieneLogo ? '- Logo disponible: insertar como <img src="LOGO_BASE64_PLACEHOLDER" alt="Logo"> en la barra de navegación (altura ~50px)' : ''}
-${tieneFoto ? '- Foto hero disponible: usar url("FOTO_PRINCIPAL_BASE64_PLACEHOLDER") como background-image del header principal con overlay oscuro para legibilidad' : ''}
 
-SECCIONES A INCLUIR (en este orden): ${activas}
+Genera contenido cálido, espiritual y contemporáneo. Tono acogedor pero no anticuado. NO uses la palabra "sermón", usa "predicación" o "mensaje" (contexto chileno).
 
-ESTILO VISUAL (muy importante):
-- Diseño contemporáneo 2026, estilo editorial moderno, inspirado en sitios como Linear, Stripe, Apple.
-- Paleta de colores armoniosa y profesional. Sugerencia: azules profundos (#1e3a5f, #2c5aa0) combinados con un acento cálido (dorado #d4a574 o terracota #c87456). Fondos blancos o crema (#fafaf7) para secciones, gris muy claro (#f4f4f0) para alternar.
-- Tipografía: usa Google Fonts. Para títulos: "Playfair Display" o "Cormorant Garamond" (elegante serif). Para texto: "Inter" o "DM Sans" (sans-serif limpia). Incluye el link en el <head>.
-- Espaciado MUY generoso. Padding vertical de secciones mínimo 80px en desktop. Mucho aire entre elementos.
-- Jerarquía tipográfica clara: títulos grandes (3-4em), subtítulos medianos, texto cómodo (1.05em, line-height 1.7).
-- Sombras suaves y modernas: box-shadow: 0 10px 40px rgba(0,0,0,0.06).
-- Bordes redondeados sutiles (border-radius: 12px en cards, 8px en botones).
-- Transiciones suaves en hover (transition: all 0.3s ease).
-- Cards con hover effect que las eleve ligeramente (transform: translateY(-4px)).
+Devuelve SOLO un JSON válido con esta estructura exacta (incluye solo las claves de las secciones activas: ${seccionesActivas.join(', ')}):
 
-ESTRUCTURA:
-- Barra de navegación STICKY en top con fondo sólido blanco u oscuro (NO transparente), altura fija de 70px, padding horizontal 24px. En desktop: enlaces en fila horizontal con flexbox (display: flex, gap: 24px). En móvil (max-width: 768px): OBLIGATORIO implementar menú hamburguesa funcional. Para que funcione, incluye DENTRO del HTML un input checkbox oculto con id="menu-toggle" y un label con clase "hamburger" que apunte a ese checkbox usando for="menu-toggle". Cuando el checkbox esté marcado (#menu-toggle:checked ~ .nav-links), los enlaces del menú deben aparecer en pantalla con position fixed cubriendo toda la pantalla desde top:70px hasta bottom:0, con overflow-y: auto para permitir scroll vertical cuando hay muchas opciones, y padding generoso de 20px. Los enlaces dentro del menú móvil deben tener padding vertical 16px cada uno para fácil tap. Las 3 líneas del hamburger deben ser 3 divs o spans dentro del label con clase hamburger, con CSS visible solo en móvil (display:none en desktop, display:flex en móvil). Esto NO requiere JavaScript, todo funciona con CSS puro usando el truco del checkbox. Cada sección debe usar scroll-margin-top: 90px.- Scroll suave con scroll-behavior: smooth en html.- Header principal (hero): pantalla grande con nombre + lema, botón CTA destacado. Si hay fotoPrincipal, úsala como background con overlay rgba(0,0,0,0.5).
-- Cada sección con id matching del menú nav.
-- Footer elegante con info de contacto y redes.
-
-CONTENIDO POR SECCIÓN (si están activas):
-- horarios_ubicacion: 3 cards con horarios reales (Domingo servicio, Miércoles estudio bíblico, Viernes oración) + caja con dirección.
-- biblioteca_sermones: grid de 3-4 PREDICACIONES (NO uses la palabra "sermón", usa "predicación" o "mensaje" porque el contexto es chileno). Cada una con título inventado coherente, predicador, botón "Escuchar".- calendario_eventos: 3 eventos próximos con fecha estilizada (día grande, mes pequeño) y descripción.
-- transmision_vivo: placeholder de video grande con texto explicativo.
-- ministerios: grid de 3 cards (Jóvenes, Infantil, Música) con descripción y líder.
-- formulario_contacto: form moderno con nombre, email, mensaje + botón WhatsApp destacado verde.
-- pagina_nuevos_visitantes: 4 pasos numerados acogedores.
-- donaciones: explicación cálida + métodos de donación + botón.
-- galeria_fotos: grid de 6 placeholders de fotos.
-- blog_devocionales: 3 posts con fecha, título y "Leer más".
-- redes_sociales: iconos SVG inline de redes sociales.
-
-REGLAS ESTRICTAS:
-- Devuelve SOLO HTML completo desde <!DOCTYPE html> hasta </html>. Sin markdown, sin \`\`\`, sin explicaciones antes ni después.
-- Todo el CSS dentro de <style> en el <head>. Sin archivos externos excepto Google Fonts.
-- NO uses emojis. Solo iconos SVG inline minimalistas (linear-style, stroke 1.5).
-- Responsivo: media queries para móvil (max-width: 768px).
-- Tono cálido, acogedor, espiritual pero contemporáneo (no anticuado).
-- Botones de WhatsApp enlazan a https://wa.me/${(redes.whatsapp || '').replace(/[^0-9]/g, '')}.
-- Si incluyes un menú hamburguesa, DEBE ser funcional con CSS puro (truco del checkbox), no uses JavaScript ni dependas de él.`;
+{
+  "hero_cta": "texto botón principal, máx 3 palabras",
+  "horarios_intro": "subtítulo breve, máx 8 palabras",
+  "horarios": [
+    {"titulo": "nombre del servicio", "horario": "día y hora"},
+    {"titulo": "...", "horario": "..."},
+    {"titulo": "...", "horario": "..."}
+  ],
+  "predicaciones_intro": "subtítulo breve",
+  "predicaciones": [
+    {"titulo": "título inventado", "predicador": "Pastor/Pastora Nombre"},
+    {"titulo": "...", "predicador": "..."},
+    {"titulo": "...", "predicador": "..."}
+  ],
+  "eventos_intro": "subtítulo breve",
+  "eventos": [
+    {"fecha_dia": "15", "fecha_mes": "JUN", "titulo": "nombre del evento", "hora": "20:00"},
+    {"fecha_dia": "22", "fecha_mes": "JUN", "titulo": "...", "hora": "..."},
+    {"fecha_dia": "05", "fecha_mes": "JUL", "titulo": "...", "hora": "..."}
+  ],
+  "transmision_intro": "subtítulo breve",
+  "transmision_nota": "frase explicando cuándo transmiten",
+  "ministerios_intro": "subtítulo breve",
+  "ministerios": [
+    {"nombre": "Ministerio de ...", "descripcion": "breve descripción", "lider": "Nombre"},
+    {"nombre": "...", "descripcion": "...", "lider": "..."},
+    {"nombre": "...", "descripcion": "...", "lider": "..."}
+  ],
+  "nuevos_intro": "subtítulo breve",
+  "pasos_nuevos": [
+    "Frase corta y acogedora 1",
+    "Frase corta y acogedora 2",
+    "Frase corta y acogedora 3",
+    "Frase corta y acogedora 4"
+  ],
+  "donaciones_intro": "subtítulo breve",
+  "blog_intro": "subtítulo breve",
+  "posts": [
+    {"fecha": "10 Jun 2026", "titulo": "Título del devocional"},
+    {"fecha": "03 Jun 2026", "titulo": "..."},
+    {"fecha": "27 May 2026", "titulo": "..."}
+  ]
 }
 
+REGLAS:
+- Devuelve SOLO el JSON, sin markdown, sin \`\`\`, sin explicaciones.
+- Solo incluye las claves de las secciones activas.
+- Textos en español chileno, naturales y cálidos.
+- Inventa nombres realistas chilenos para predicadores y líderes (Juan Pérez, María González, etc.).`;
+}
 async function generarConIA(datos) {
   const prompt = construirPrompt(datos);
 
@@ -337,8 +351,9 @@ async function generarConIA(datos) {
     'https://api.groq.com/openai/v1/chat/completions',
     {
       model: 'openai/gpt-oss-120b',
-      max_tokens: 5000,
+      max_tokens: 3000,
       messages: [{ role: 'user', content: prompt }],
+      response_format: { type: 'json_object' },
     },
     {
       headers: {
@@ -348,17 +363,23 @@ async function generarConIA(datos) {
     }
   );
 
-  let html = response.data.choices[0].message.content;
-  html = html.replace(/```html/g, '').replace(/```/g, '').trim();
-  if (datos.multimedia?.logo) {
-    html = html.replace('LOGO_BASE64_PLACEHOLDER', datos.multimedia.logo);
+  let respuesta = response.data.choices[0].message.content;
+  
+  // Parsear JSON
+  let contenido = {};
+  try {
+    // Limpiar por si viene con markdown
+    respuesta = respuesta.replace(/```json/g, '').replace(/```/g, '').trim();
+    contenido = JSON.parse(respuesta);
+  } catch (err) {
+    console.error('Error parseando JSON de IA:', err);
+    contenido = {}; // Fallback: usa los valores por defecto de la plantilla
   }
-  if (datos.multimedia?.fotoPrincipal) {
-    html = html.replace('FOTO_PRINCIPAL_BASE64_PLACEHOLDER', datos.multimedia.fotoPrincipal);
-  }
+  
+  // Generar HTML usando plantilla + contenido
+  const html = generarPlantilla(datos, contenido);
   return html;
 }
-
 // ============================================
 // CONTROLADORES
 // ============================================
