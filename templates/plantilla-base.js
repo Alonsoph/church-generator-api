@@ -83,7 +83,7 @@ ${cssBase()}
     <label for="menu-toggle" class="hamburger">
       <span></span><span></span><span></span>
     </label>
-<div class="nav-links" onclick="if(event.target.tagName==='A'){document.getElementById('menu-toggle').checked=false;}">
+<div class="nav-links" onclick="var t=event.target;if(t.tagName==='A'){event.preventDefault();var h=t.getAttribute('href');if(h&&h.startsWith('#')){var el=document.getElementById(h.substring(1));if(el){el.scrollIntoView({behavior:'smooth',block:'start'});}}document.getElementById('menu-toggle').checked=false;}">
   ${navLinks}
 </div>
 </div></nav>
