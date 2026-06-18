@@ -122,6 +122,11 @@ function seccionHorarios(c, direccion, ciudad) {
     { titulo: 'Estudio Bíblico', horario: 'Miércoles · 19:00 PM' },
     { titulo: 'Oración', horario: 'Viernes · 20:00 PM' },
   ];
+  
+  const direccionCompleta = `${direccion}${ciudad ? ', ' + ciudad : ''}`;
+  const direccionUrl = encodeURIComponent(direccionCompleta);
+  const mapaSrc = `https://www.google.com/maps?q=${direccionUrl}&output=embed`;
+  
   return `
 <section id="horarios" class="seccion seccion-clara">
   <div class="contenedor">
@@ -136,12 +141,24 @@ function seccionHorarios(c, direccion, ciudad) {
       `).join('')}
     </div>
     <div class="ubicacion-box">
-      <strong>Dirección:</strong> ${direccion}${ciudad ? ', ' + ciudad : ''}
+      <strong>Dirección:</strong> ${direccionCompleta}
     </div>
+    ${direccion ? `
+    <div class="mapa-contenedor">
+      <iframe 
+        src="${mapaSrc}" 
+        width="100%" 
+        height="400" 
+        style="border:0; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.08);" 
+        allowfullscreen="" 
+        loading="lazy" 
+        referrerpolicy="no-referrer-when-downgrade">
+      </iframe>
+    </div>
+    ` : ''}
   </div>
 </section>`;
 }
-
 function seccionPredicaciones(c) {
   const predicaciones = c.predicaciones || [
     { titulo: 'El poder de la fe', predicador: 'Pastor Juan Pérez' },
@@ -565,6 +582,11 @@ h2 {
   text-align: center;
   border-left: 4px solid #d4a574;
   box-shadow: 0 5px 20px rgba(0,0,0,0.04);
+}
+
+.mapa-contenedor {
+  max-width: 900px;
+  margin: 40px auto 0;
 }
 
 /* ============ EVENTOS ============ */
