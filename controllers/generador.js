@@ -1,6 +1,5 @@
 const axios = require('axios');
-const { generarPlantillaReverente } = require('../templates/plantilla-reverente');
-// NOTA: Este archivo ahora usa DeepSeek en lugar de Claude.
+const { seleccionarPlantilla, generarHTML } = require('../templates/selector');// NOTA: Este archivo ahora usa DeepSeek en lugar de Claude.
 // DeepSeek es compatible con el formato de OpenAI.
 
 // ============================================
@@ -376,8 +375,9 @@ async function generarConIA(datos) {
   }
   
   // Generar HTML usando plantilla + contenido
-  const html = generarPlantillaReverente(datos, contenido);
-  return html;
+// Si el frontend mandó una plantilla específica, úsala. Si no, selecciona automáticamente.
+const plantillaElegida = datos.plantilla_forzada || seleccionarPlantilla(datos.preferencias_diseno || {});
+const html = generarHTML(plantillaElegida, datos, contenido);  return html;
 }
 // ============================================
 // CONTROLADORES
