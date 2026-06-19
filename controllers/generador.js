@@ -374,33 +374,38 @@ async function generarConIA(datos) {
     contenido = {}; // Fallback: usa los valores por defecto de la plantilla
   }
   
-  // Generar HTML usando plantilla + contenido
-// Si el frontend mandó una plantilla específica, úsala. Si no, selecciona automáticamente.
-console.log('PREFERENCIAS RECIBIDAS:', JSON.stringify(datos.preferencias_diseno));
-const plantillaElegida = datos.plantilla_forzada || seleccionarPlantilla(datos.preferencias_diseno || {});
-console.log('PLANTILLA ELEGIDA:', plantillaElegida);const html = generarHTML(plantillaElegida, datos, contenido);  return html;
-}
-// ============================================
+// Generar HTML usando plantilla + contenido
+  console.log('PREFERENCIAS RECIBIDAS:', JSON.stringify(datos.preferencias_diseno));
+  const plantillaElegida = datos.plantilla_forzada || seleccionarPlantilla(datos.preferencias_diseno || {});
+  console.log('PLANTILLA ELEGIDA:', plantillaElegida);
+  const html = generarHTML(plantillaElegida, datos, contenido);
+  return { html, plantillaElegida, contenido };
+}// ============================================
 // CONTROLADORES
 // ============================================
 exports.generarPagina = async (req, res) => {
   try {
     const usarIA = req.body.usar_ia === true;
-    let html;
+    let html, plantillaElegida, contenido;
 
     if (usarIA) {
-      html = await generarConIA(req.body);
+      const resultado = await generarConIA(req.body);
+      html = resultado.html;
+      plantillaElegida = resultado.plantillaElegida;
+      contenido = resultado.contenido;
     } else {
       html = construirHTML(req.body);
+      plantillaElegida = 'reverente';
+      contenido = {};
     }
 
-res.json({
+    res.json({
       exito: true,
       html: html,
       modo: usarIA ? 'Claude IA' : 'Plantilla',
       mensaje: 'Página generada exitosamente',
       plantilla_usada: plantillaElegida,
-      datos_generados: { datos, contenido },
+      datos_generados: { datos: req.body, contenido },
     });  } catch (error) {
     console.error(error.response?.data || error.message);
     res.status(500).json({
