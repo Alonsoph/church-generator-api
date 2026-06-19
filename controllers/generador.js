@@ -394,13 +394,14 @@ exports.generarPagina = async (req, res) => {
       html = construirHTML(req.body);
     }
 
-    res.json({
+res.json({
       exito: true,
       html: html,
       modo: usarIA ? 'Claude IA' : 'Plantilla',
       mensaje: 'Página generada exitosamente',
-    });
-  } catch (error) {
+      plantilla_usada: plantillaElegida,
+      datos_generados: { datos, contenido },
+    });  } catch (error) {
     console.error(error.response?.data || error.message);
     res.status(500).json({
       exito: false,
@@ -410,6 +411,33 @@ exports.generarPagina = async (req, res) => {
   }
 };
 
+exports.cambiarPlantilla = (req, res) => {
+  try {
+    const { plantilla, datos, contenido } = req.body;
+
+    if (!plantilla || !datos || !contenido) {
+      return res.status(400).json({
+        exito: false,
+        mensaje: 'Faltan datos: plantilla, datos o contenido',
+      });
+    }
+
+    const html = generarHTML(plantilla, datos, contenido);
+
+    res.json({
+      exito: true,
+      html: html,
+      plantilla_usada: plantilla,
+    });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).json({
+      exito: false,
+      mensaje: 'Error al cambiar plantilla',
+      error: error.message,
+    });
+  }
+};
 exports.mostrarPreview = (req, res) => {
   const datosEjemplo = {
     iglesia: { nombre: 'Iglesia Pentecostal Vida Nueva', lema: 'Transformados por su gracia' },
