@@ -504,3 +504,29 @@ exports.aprobarIglesia = async (req, res) => {
     });
   }
 };
+
+exports.listarPendientes = async (req, res) => {
+  const pool = require('../config/db');
+  try {
+    const result = await pool.query(
+      `SELECT id, nombre_iglesia, email_contacto, whatsapp_contacto, 
+      sugerencias_cliente, plan_seleccionado, estado, fecha_creacion, codigo_referencia
+      FROM iglesias_aprobadas
+      WHERE estado = 'pendiente_revision'
+      ORDER BY fecha_creacion DESC`
+    );
+
+    res.json({
+      exito: true,
+      total: result.rows.length,
+      iglesias: result.rows,
+    });
+  } catch (error) {
+    console.error('Error al listar:', error);
+    res.status(500).json({
+      exito: false,
+      mensaje: 'Error al listar pendientes',
+      error: error.message,
+    });
+  }
+};
