@@ -376,8 +376,9 @@ async function generarConIA(datos) {
   
   // Generar HTML usando plantilla + contenido
 // Si el frontend mandó una plantilla específica, úsala. Si no, selecciona automáticamente.
+console.log('PREFERENCIAS RECIBIDAS:', JSON.stringify(datos.preferencias_diseno));
 const plantillaElegida = datos.plantilla_forzada || seleccionarPlantilla(datos.preferencias_diseno || {});
-const html = generarHTML(plantillaElegida, datos, contenido);  return html;
+console.log('PLANTILLA ELEGIDA:', plantillaElegida);const html = generarHTML(plantillaElegida, datos, contenido);  return html;
 }
 // ============================================
 // CONTROLADORES
