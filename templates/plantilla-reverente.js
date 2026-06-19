@@ -900,4 +900,4 @@ footer {
 `;
 }
 
-module.exports = { generarPlantilla };
+module.exports = { generarPlantillaReverente: generarPlantilla };
