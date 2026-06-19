@@ -471,12 +471,13 @@ exports.aprobarIglesia = async (req, res) => {
       html_generado,
       sugerencias_cliente,
       plan_seleccionado,
+      codigo_referencia,
     } = req.body;
 
     const result = await pool.query(
       `INSERT INTO iglesias_aprobadas 
-      (nombre_iglesia, email_contacto, whatsapp_contacto, html_generado, sugerencias_cliente, plan_seleccionado)
-      VALUES ($1, $2, $3, $4, $5, $6)
+      (nombre_iglesia, email_contacto, whatsapp_contacto, html_generado, sugerencias_cliente, plan_seleccionado, codigo_referencia)
+      VALUES ($1, $2, $3, $4, $5, $6, $7)
       RETURNING id, fecha_creacion`,
       [
         nombre_iglesia,
@@ -485,6 +486,7 @@ exports.aprobarIglesia = async (req, res) => {
         html_generado,
         sugerencias_cliente,
         plan_seleccionado,
+        codigo_referencia || null,
       ]
     );
 
@@ -498,32 +500,6 @@ exports.aprobarIglesia = async (req, res) => {
     res.status(500).json({
       exito: false,
       mensaje: 'Error al guardar la aprobación',
-      error: error.message,
-    });
-  }
-};
-
-exports.listarPendientes = async (req, res) => {
-  const pool = require('../config/db');
-  try {
-    const result = await pool.query(
-      `SELECT id, nombre_iglesia, email_contacto, whatsapp_contacto, 
-      sugerencias_cliente, plan_seleccionado, estado, fecha_creacion
-      FROM iglesias_aprobadas
-      WHERE estado = 'pendiente_revision'
-      ORDER BY fecha_creacion DESC`
-    );
-
-    res.json({
-      exito: true,
-      total: result.rows.length,
-      iglesias: result.rows,
-    });
-  } catch (error) {
-    console.error('Error al listar:', error);
-    res.status(500).json({
-      exito: false,
-      mensaje: 'Error al listar pendientes',
       error: error.message,
     });
   }
