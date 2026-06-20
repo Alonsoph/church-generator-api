@@ -1,4 +1,6 @@
-// Plantilla ACOGEDORA: mix serif suave + sans humanista, terracota + crema + verde oliva
+// Plantilla ACOGEDORA: cálida, familiar
+// Cards tipo burbuja (border-radius grande), botones pill, hero con foto orgánica,
+// patrón sutil de fondo. Terracota + crema + verde oliva. Fraunces + Nunito Sans.
 
 function generarPlantilla(datos, contenido) {
   const nombre = datos.iglesia?.nombre || 'Iglesia';
@@ -62,12 +64,13 @@ function generarPlantilla(datos, contenido) {
   return `<!DOCTYPE html>
 <html lang="es">
 <head>
+<base target="_self">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>${nombre}</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600;700&family=Nunito+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@400;500;600;700&family=Nunito+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 ${cssBase()}
 </style>
@@ -87,11 +90,20 @@ ${cssBase()}
   </div>
 </nav>
 
-<header class="hero" ${fotoPrincipal ? `style="background-image: linear-gradient(rgba(60,30,20,0.5), rgba(60,30,20,0.5)), url('${fotoPrincipal}')"` : ''}>
-  <div class="hero-content">
-    <h1>${nombre}</h1>
-    <p class="lema">${lema}</p>
-    <a href="#contacto" class="btn-cta">${contenido.hero_cta || 'Conócenos'}</a>
+<header class="hero">
+  <div class="hero-grid">
+    <div class="hero-texto">
+      <span class="hero-pill">Bienvenidos a casa</span>
+      <h1>${nombre}</h1>
+      <p class="lema">${lema}</p>
+      <a href="#contacto" class="btn-cta">${contenido.hero_cta || 'Conócenos'}</a>
+    </div>
+    <div class="hero-visual">
+      <div class="hero-foto" ${fotoPrincipal ? `style="background-image: url('${fotoPrincipal}')"` : ''}>
+        ${!fotoPrincipal ? `<div class="hero-foto-deco"></div>` : ''}
+      </div>
+      <div class="hero-circulo-pequeno"></div>
+    </div>
   </div>
 </header>
 
@@ -104,7 +116,7 @@ ${secciones}
     <h3>${nombre}</h3>
     <p>${direccion}${ciudad ? ', ' + ciudad : ''}</p>
     ${whatsapp ? `<p><a href="${whatsappLink}">${whatsapp}</a></p>` : ''}
-    <p class="footer-copy">© ${new Date().getFullYear()} ${nombre}</p>
+    <p class="footer-copy">© ${new Date().getFullYear()} ${nombre}. Todos los derechos reservados.</p>
   </div>
 </footer>
 
@@ -125,7 +137,7 @@ function seccionHorarios(c, direccion, ciudad) {
   const direccionCompleta = `${direccion}${ciudad ? ', ' + ciudad : ''}`;
   const mapaSrc = `https://www.google.com/maps?q=${encodeURIComponent(direccionCompleta)}&output=embed`;
   return `
-<section id="horarios" class="seccion seccion-clara">
+<section id="horarios" class="seccion">
   <div class="contenedor">
     <h2>Horarios y ubicación</h2>
     <p class="subtitulo">${c.horarios_intro || 'Te esperamos cada semana'}</p>
@@ -138,12 +150,12 @@ function seccionHorarios(c, direccion, ciudad) {
       `).join('')}
     </div>
     <div class="ubicacion-box">
-      <strong>Dirección</strong>
+      <strong>Nuestra dirección</strong>
       <span>${direccionCompleta}</span>
     </div>
     ${direccion ? `
     <div class="mapa-contenedor">
-      <iframe src="${mapaSrc}" width="100%" height="400" style="border:0;border-radius:16px;" allowfullscreen="" loading="lazy"></iframe>
+      <iframe src="${mapaSrc}" width="100%" height="400" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
     </div>
     ` : ''}
   </div>
@@ -157,7 +169,7 @@ function seccionPredicaciones(c) {
     { titulo: 'Una esperanza viva', predicador: 'Pastora María' },
   ];
   return `
-<section id="predicaciones" class="seccion">
+<section id="predicaciones" class="seccion seccion-clara">
   <div class="contenedor">
     <h2>Predicaciones</h2>
     <p class="subtitulo">${c.predicaciones_intro || 'Escucha y crece en tu fe'}</p>
@@ -181,7 +193,7 @@ function seccionEventos(c) {
     { fecha_dia: '05', fecha_mes: 'JUL', titulo: 'Retiro espiritual', hora: '09:00' },
   ];
   return `
-<section id="eventos" class="seccion seccion-clara">
+<section id="eventos" class="seccion">
   <div class="contenedor">
     <h2>Próximos eventos</h2>
     <p class="subtitulo">${c.eventos_intro || 'No te pierdas nuestras actividades'}</p>
@@ -205,7 +217,7 @@ function seccionEventos(c) {
 
 function seccionTransmision(c) {
   return `
-<section id="transmision" class="seccion">
+<section id="transmision" class="seccion seccion-clara">
   <div class="contenedor">
     <h2>Transmisión en vivo</h2>
     <p class="subtitulo">${c.transmision_intro || 'Acompáñanos desde donde estés'}</p>
@@ -224,7 +236,7 @@ function seccionMinisterios(c) {
     { nombre: 'Música', descripcion: 'Alabanza y adoración', lider: 'Director David' },
   ];
   return `
-<section id="ministerios" class="seccion seccion-clara">
+<section id="ministerios" class="seccion">
   <div class="contenedor">
     <h2>Nuestros ministerios</h2>
     <p class="subtitulo">${c.ministerios_intro || 'Hay un lugar para ti en nuestra familia'}</p>
@@ -233,7 +245,7 @@ function seccionMinisterios(c) {
         <div class="card">
           <h3>${m.nombre}</h3>
           <p>${m.descripcion}</p>
-          <span class="meta">${m.lider}</span>
+          <span class="meta">Líder: ${m.lider}</span>
         </div>
       `).join('')}
     </div>
@@ -243,7 +255,7 @@ function seccionMinisterios(c) {
 
 function seccionContacto(whatsappLink) {
   return `
-<section id="contacto" class="seccion">
+<section id="contacto" class="seccion seccion-clara">
   <div class="contenedor">
     <h2>Contáctanos</h2>
     <p class="subtitulo">Estamos aquí para ti</p>
@@ -259,13 +271,13 @@ function seccionContacto(whatsappLink) {
 
 function seccionNuevos(c) {
   const pasos = c.pasos_nuevos || [
-    'Llega unos minutos antes y te recibiremos con gusto',
+    'Llega unos minutos antes y te recibiremos con un abrazo',
     'Vístete cómodo, no hay código de vestimenta',
     'Tenemos espacio para tus niños durante el servicio',
     'Quédate después para un café y conocernos',
   ];
   return `
-<section id="nuevos" class="seccion seccion-clara">
+<section id="nuevos" class="seccion">
   <div class="contenedor">
     <h2>¿Es tu primera vez?</h2>
     <p class="subtitulo">${c.nuevos_intro || 'Queremos que te sientas como en casa'}</p>
@@ -283,23 +295,25 @@ function seccionNuevos(c) {
 
 function seccionDonaciones(c) {
   return `
-<section id="donaciones" class="seccion">
+<section id="donaciones" class="seccion seccion-clara">
   <div class="contenedor">
-    <h2>Donaciones</h2>
+    <h2>Donaciones y ofrendas</h2>
     <p class="subtitulo">${c.donaciones_intro || 'Tu generosidad sostiene la obra'}</p>
     <div class="metodos-donacion">
       <div class="metodo">Transferencia</div>
       <div class="metodo">Tarjeta</div>
       <div class="metodo">Pago móvil</div>
     </div>
-    <a href="#contacto" class="btn-cta">Quiero donar</a>
+    <div style="text-align:center;">
+      <a href="#contacto" class="btn-cta">Quiero donar</a>
+    </div>
   </div>
 </section>`;
 }
 
 function seccionGaleria() {
   return `
-<section id="galeria" class="seccion seccion-clara">
+<section id="galeria" class="seccion">
   <div class="contenedor">
     <h2>Galería</h2>
     <p class="subtitulo">Momentos de nuestra comunidad</p>
@@ -317,7 +331,7 @@ function seccionBlog(c) {
     { fecha: '27 May 2026', titulo: 'El amor que transforma' },
   ];
   return `
-<section id="blog" class="seccion">
+<section id="blog" class="seccion seccion-clara">
   <div class="contenedor">
     <h2>Devocionales</h2>
     <p class="subtitulo">${c.blog_intro || 'Alimenta tu espíritu cada semana'}</p>
@@ -336,7 +350,7 @@ function seccionBlog(c) {
 
 function seccionRedes(whatsappLink) {
   return `
-<section id="redes" class="seccion seccion-clara">
+<section id="redes" class="seccion">
   <div class="contenedor">
     <h2>Síguenos</h2>
     <p class="subtitulo">Conéctate con nosotros</p>
@@ -351,7 +365,7 @@ function seccionRedes(whatsappLink) {
 }
 
 // ============================================
-// CSS - Estilo cálido, terracota + crema + serif suave
+// CSS — ACOGEDORA (cards burbuja, pills, patrón sutil, hero orgánico)
 // ============================================
 function cssBase() {
   return `
@@ -360,9 +374,13 @@ html { scroll-behavior: smooth; }
 
 body {
   font-family: 'Nunito Sans', -apple-system, sans-serif;
-  color: #3d2e26;
+  color: #3d2f24;
   line-height: 1.7;
-  background: #fdf8f3;
+  background:
+    radial-gradient(circle at 1px 1px, rgba(200, 116, 86, 0.06) 1px, transparent 0),
+    #fdf8f3;
+  background-size: 24px 24px;
+  font-weight: 400;
 }
 
 /* NAVBAR */
@@ -371,42 +389,44 @@ body {
 .navbar {
   position: sticky;
   top: 0;
-  background: #fdf8f3;
-  border-bottom: 1px solid #ebe0d2;
+  background: rgba(253, 248, 243, 0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   z-index: 1000;
-  height: 70px;
+  height: 72px;
 }
 
 .nav-container {
   max-width: 1200px;
   margin: 0 auto;
   height: 100%;
-  padding: 0 24px;
+  padding: 0 28px;
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
 
-.logo { height: 48px; width: auto; border-radius: 8px; }
+.logo { height: 44px; width: auto; }
 
 .logo-text {
   font-family: 'Fraunces', serif;
   font-size: 1.4em;
   font-weight: 600;
   color: #c87456;
+  letter-spacing: -0.3px;
 }
 
 .nav-links {
   display: flex;
-  gap: 28px;
+  gap: 30px;
   align-items: center;
 }
 
 .nav-link {
-  color: #5a4a3e;
+  color: #3d2f24;
   text-decoration: none;
-  font-weight: 500;
-  font-size: 0.95em;
+  font-weight: 600;
+  font-size: 0.92em;
   transition: color 0.2s;
 }
 
@@ -421,92 +441,182 @@ body {
 }
 
 .hamburger span {
-  width: 26px;
-  height: 3px;
-  background: #c87456;
+  width: 24px;
+  height: 2px;
+  background: #3d2f24;
   border-radius: 2px;
   transition: all 0.3s;
 }
 
-/* HERO */
+/* HERO con foto orgánica */
 .hero {
-  min-height: 75vh;
-  background-size: cover;
-  background-position: center;
-  background-color: #c87456;
+  background: transparent;
+  padding: 60px 28px 100px;
+  min-height: calc(100vh - 72px);
   display: flex;
   align-items: center;
-  justify-content: center;
-  text-align: center;
-  color: white;
-  padding: 80px 24px;
+  position: relative;
+  overflow: hidden;
 }
 
-.hero-content { max-width: 700px; }
+.hero::before {
+  content: '';
+  position: absolute;
+  top: 10%;
+  left: -10%;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(122, 143, 94, 0.12), transparent 65%);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.hero-grid {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: 64px;
+  align-items: center;
+  width: 100%;
+  position: relative;
+  z-index: 1;
+}
+
+.hero-texto { max-width: 560px; }
+
+.hero-pill {
+  display: inline-block;
+  background: rgba(200, 116, 86, 0.12);
+  color: #c87456;
+  padding: 8px 18px;
+  border-radius: 999px;
+  font-size: 0.82em;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+  margin-bottom: 24px;
+}
 
 .hero h1 {
   font-family: 'Fraunces', serif;
-  font-size: 3.6em;
+  font-size: clamp(2.6em, 5.5vw, 4.4em);
   font-weight: 600;
-  margin-bottom: 20px;
-  line-height: 1.1;
+  margin-bottom: 22px;
+  line-height: 1.05;
+  letter-spacing: -1.5px;
+  color: #3d2f24;
 }
 
 .hero .lema {
-  font-size: 1.25em;
+  font-size: 1.2em;
   margin-bottom: 40px;
-  opacity: 0.95;
-  font-style: italic;
+  color: #6b5848;
+  font-weight: 400;
+  line-height: 1.55;
 }
 
 .btn-cta {
   display: inline-block;
-  background: #fdf8f3;
-  color: #c87456;
-  padding: 16px 40px;
-  border-radius: 50px;
+  background: #c87456;
+  color: #fdf8f3;
+  padding: 16px 36px;
+  border-radius: 999px;
   text-decoration: none;
-  font-weight: 600;
-  font-size: 1em;
-  transition: all 0.3s;
+  font-weight: 700;
+  font-size: 0.95em;
+  transition: all 0.2s;
   border: none;
   cursor: pointer;
+  font-family: inherit;
+  box-shadow: 0 8px 20px rgba(200, 116, 86, 0.25);
 }
 
 .btn-cta:hover {
-  background: #f5e9d8;
+  background: #b5644a;
   transform: translateY(-2px);
-  box-shadow: 0 10px 25px rgba(200,116,86,0.25);
+  box-shadow: 0 12px 28px rgba(200, 116, 86, 0.35);
+}
+
+/* Foto hero con borde orgánico */
+.hero-visual {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.hero-foto {
+  width: 100%;
+  max-width: 460px;
+  aspect-ratio: 1 / 1.1;
+  background-color: #7a8f5e;
+  background-size: cover;
+  background-position: center;
+  border-radius: 58% 42% 50% 50% / 45% 55% 45% 55%;
+  position: relative;
+  box-shadow: 0 24px 60px rgba(122, 143, 94, 0.25);
+  overflow: hidden;
+}
+
+.hero-foto-deco {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 30% 30%, rgba(200, 116, 86, 0.35), transparent 50%),
+    radial-gradient(circle at 70% 70%, rgba(253, 248, 243, 0.2), transparent 50%);
+}
+
+.hero-circulo-pequeno {
+  position: absolute;
+  bottom: 10%;
+  right: 5%;
+  width: 110px;
+  height: 110px;
+  background: #c87456;
+  border-radius: 50%;
+  opacity: 0.18;
+  z-index: -1;
 }
 
 /* SECCIONES */
 .seccion {
-  padding: 90px 24px;
+  padding: 100px 28px;
   scroll-margin-top: 90px;
 }
 
-.seccion-clara { background: #f5e9d8; }
+.seccion-clara {
+  background: #f5ebe0;
+  background-image:
+    radial-gradient(circle at 1px 1px, rgba(200, 116, 86, 0.08) 1px, transparent 0);
+  background-size: 24px 24px;
+}
 
 .contenedor { max-width: 1100px; margin: 0 auto; }
 
 h2 {
   font-family: 'Fraunces', serif;
-  font-size: 2.6em;
-  color: #6b4423;
+  font-size: clamp(2em, 4vw, 2.8em);
+  color: #3d2f24;
   text-align: center;
   margin-bottom: 14px;
   font-weight: 600;
+  letter-spacing: -1px;
+  line-height: 1.1;
 }
 
 .subtitulo {
   text-align: center;
-  color: #8a7263;
+  color: #6b5848;
   font-size: 1.1em;
-  margin-bottom: 50px;
-  font-style: italic;
+  margin-bottom: 56px;
+  font-weight: 400;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
-/* CARDS */
+/* CARDS tipo burbuja */
 .grid-3 {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -515,85 +625,103 @@ h2 {
 
 .card {
   background: #fdf8f3;
-  padding: 32px 28px;
-  border-radius: 20px;
-  box-shadow: 0 8px 30px rgba(107,68,35,0.06);
+  padding: 40px 32px;
+  border-radius: 28px;
+  border: 1px solid rgba(200, 116, 86, 0.12);
   transition: all 0.3s;
   text-align: center;
 }
 
+.seccion-clara .card { background: #fdf8f3; }
+
 .card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 15px 40px rgba(107,68,35,0.12);
+  box-shadow: 0 16px 40px rgba(122, 92, 70, 0.12);
+  border-color: rgba(200, 116, 86, 0.3);
 }
 
 .card h3 {
   font-family: 'Fraunces', serif;
-  color: #6b4423;
-  font-size: 1.35em;
+  color: #3d2f24;
+  font-size: 1.4em;
   margin-bottom: 12px;
   font-weight: 600;
+  letter-spacing: -0.3px;
 }
 
-.card p { color: #5a4a3e; margin-bottom: 12px; }
+.card p {
+  color: #6b5848;
+  margin-bottom: 14px;
+  font-size: 0.95em;
+}
 
 .card .meta {
   display: block;
   color: #7a8f5e;
-  font-size: 0.9em;
-  font-weight: 600;
-  margin-top: 8px;
+  font-size: 0.88em;
+  font-weight: 700;
+  margin-top: 10px;
 }
 
 .btn-secundario {
   background: transparent;
   color: #c87456;
-  border: 2px solid #c87456;
+  border: 1.5px solid #c87456;
   padding: 10px 24px;
-  border-radius: 50px;
-  font-weight: 600;
+  border-radius: 999px;
+  font-weight: 700;
   cursor: pointer;
-  margin-top: 12px;
+  margin-top: 16px;
   transition: all 0.2s;
+  font-size: 0.88em;
   font-family: inherit;
 }
 
 .btn-secundario:hover {
   background: #c87456;
-  color: white;
+  color: #fdf8f3;
 }
 
 /* UBICACIÓN */
 .ubicacion-box {
   background: #fdf8f3;
-  max-width: 600px;
+  max-width: 640px;
   margin: 40px auto 0;
-  padding: 28px;
-  border-radius: 20px;
-  border-left: 5px solid #7a8f5e;
-  text-align: left;
+  padding: 28px 32px;
+  border-radius: 24px;
+  border: 1px solid rgba(200, 116, 86, 0.15);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  text-align: center;
 }
 
 .ubicacion-box strong {
-  color: #7a8f5e;
+  color: #c87456;
   font-size: 0.85em;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.1em;
   font-weight: 700;
-  display: block;
-  margin-bottom: 6px;
 }
 
-.ubicacion-box span { color: #6b4423; font-size: 1.1em; }
+.ubicacion-box span {
+  color: #3d2f24;
+  font-size: 1.1em;
+  font-family: 'Fraunces', serif;
+  font-weight: 500;
+}
 
 .mapa-contenedor {
-  max-width: 900px;
-  margin: 32px auto 0;
+  max-width: 950px;
+  margin: 36px auto 0;
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 16px 40px rgba(122, 92, 70, 0.1);
 }
 
-/* EVENTOS */
+/* EVENTOS — píldoras grandes */
 .lista-eventos {
-  max-width: 750px;
+  max-width: 800px;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
@@ -604,62 +732,110 @@ h2 {
   display: flex;
   align-items: center;
   background: #fdf8f3;
-  border-radius: 20px;
+  border-radius: 28px;
   overflow: hidden;
-  box-shadow: 0 5px 20px rgba(107,68,35,0.05);
-  transition: transform 0.3s;
+  border: 1px solid rgba(200, 116, 86, 0.12);
+  transition: all 0.25s;
 }
 
-.evento:hover { transform: translateX(6px); }
+.seccion-clara .evento { background: #fdf8f3; }
+
+.evento:hover {
+  transform: translateX(4px);
+  box-shadow: 0 12px 32px rgba(122, 92, 70, 0.1);
+  border-color: rgba(200, 116, 86, 0.3);
+}
 
 .evento-fecha {
-  background: #c87456;
-  color: white;
-  padding: 22px 28px;
+  background: #7a8f5e;
+  color: #fdf8f3;
+  padding: 24px 28px;
   text-align: center;
   min-width: 100px;
   display: flex;
   flex-direction: column;
 }
 
-.fecha-dia { font-family: 'Fraunces', serif; font-size: 2em; font-weight: 700; line-height: 1; }
-.fecha-mes { font-size: 0.85em; opacity: 0.9; margin-top: 4px; }
+.fecha-dia {
+  font-family: 'Fraunces', serif;
+  font-size: 1.9em;
+  font-weight: 600;
+  line-height: 1;
+}
 
-.evento-info { padding: 20px 24px; }
-.evento-info h3 { font-family: 'Fraunces', serif; color: #6b4423; font-size: 1.25em; }
-.evento-hora { color: #7a8f5e; font-weight: 600; font-size: 0.9em; }
+.fecha-mes {
+  font-size: 0.75em;
+  opacity: 0.9;
+  margin-top: 4px;
+  letter-spacing: 0.15em;
+  font-weight: 700;
+}
+
+.evento-info { padding: 22px 28px; }
+
+.evento-info h3 {
+  font-family: 'Fraunces', serif;
+  color: #3d2f24;
+  font-size: 1.25em;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.evento-hora {
+  color: #c87456;
+  font-weight: 700;
+  font-size: 0.88em;
+}
 
 /* VIDEO */
 .video-placeholder {
-  background: #6b4423;
-  color: white;
-  max-width: 700px;
+  background: #7a8f5e;
+  color: #fdf8f3;
+  max-width: 780px;
   margin: 0 auto;
-  border-radius: 20px;
+  border-radius: 28px;
   padding: 80px 40px;
   text-align: center;
+  box-shadow: 0 24px 60px rgba(122, 143, 94, 0.2);
 }
 
-.video-placeholder p { font-size: 1.2em; margin-bottom: 12px; }
-.video-placeholder .nota { font-size: 0.9em; opacity: 0.8; }
+.video-placeholder p {
+  font-family: 'Fraunces', serif;
+  font-size: 1.3em;
+  margin-bottom: 12px;
+}
+
+.video-placeholder .nota {
+  font-family: 'Nunito Sans', sans-serif;
+  font-size: 0.9em;
+  opacity: 0.85;
+}
 
 /* FORMULARIO */
 .form-contacto {
-  max-width: 500px;
+  max-width: 540px;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 14px;
 }
 
 .form-contacto input,
 .form-contacto textarea {
-  padding: 14px 18px;
-  border: 2px solid #ebe0d2;
-  border-radius: 12px;
-  font-size: 1em;
+  padding: 16px 22px;
+  border: 1px solid rgba(200, 116, 86, 0.2);
+  border-radius: 24px;
+  font-size: 0.95em;
   font-family: inherit;
   background: #fdf8f3;
+  color: #3d2f24;
+}
+
+.form-contacto textarea { border-radius: 20px; resize: vertical; }
+
+.form-contacto input::placeholder,
+.form-contacto textarea::placeholder {
+  color: rgba(61, 47, 36, 0.5);
 }
 
 .form-contacto input:focus,
@@ -669,40 +845,42 @@ h2 {
 }
 
 .btn-whatsapp {
-  background: #7a8f5e;
+  background: #25D366;
   color: white;
   text-decoration: none;
   padding: 16px;
-  border-radius: 50px;
-  font-weight: 600;
+  border-radius: 999px;
+  font-weight: 700;
   text-align: center;
   transition: background 0.2s;
 }
 
-.btn-whatsapp:hover { background: #6a7e4f; }
+.btn-whatsapp:hover { background: #1da851; }
 
-/* PASOS NUEVOS */
+/* PASOS NUEVOS — píldoras */
 .lista-pasos {
-  max-width: 650px;
+  max-width: 700px;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  gap: 16px;
 }
 
 .paso {
   display: flex;
-  align-items: flex-start;
-  gap: 20px;
+  align-items: center;
+  gap: 24px;
   background: #fdf8f3;
-  padding: 24px;
-  border-radius: 20px;
-  box-shadow: 0 5px 20px rgba(107,68,35,0.05);
+  padding: 24px 28px;
+  border-radius: 999px;
+  border: 1px solid rgba(200, 116, 86, 0.12);
 }
+
+.seccion-clara .paso { background: #fdf8f3; }
 
 .paso-numero {
   background: #c87456;
-  color: white;
+  color: #fdf8f3;
   min-width: 44px;
   height: 44px;
   border-radius: 50%;
@@ -712,14 +890,19 @@ h2 {
   font-family: 'Fraunces', serif;
   font-weight: 700;
   font-size: 1.1em;
+  flex-shrink: 0;
 }
 
-.paso p { flex: 1; padding-top: 10px; }
+.paso p {
+  flex: 1;
+  color: #3d2f24;
+  font-size: 1em;
+}
 
 /* DONACIONES */
 .metodos-donacion {
   display: flex;
-  gap: 16px;
+  gap: 14px;
   justify-content: center;
   flex-wrap: wrap;
   margin-bottom: 40px;
@@ -727,20 +910,12 @@ h2 {
 
 .metodo {
   background: #fdf8f3;
-  padding: 22px 32px;
-  border-radius: 16px;
-  border: 2px solid #ebe0d2;
-  color: #6b4423;
+  padding: 18px 30px;
+  border-radius: 999px;
+  border: 1px solid rgba(200, 116, 86, 0.2);
+  color: #3d2f24;
   font-weight: 600;
-}
-
-#donaciones { text-align: center; }
-#donaciones .btn-cta {
-  background: #c87456;
-  color: white;
-}
-#donaciones .btn-cta:hover {
-  background: #b06143;
+  font-size: 0.95em;
 }
 
 /* GALERIA */
@@ -748,83 +923,101 @@ h2 {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 16px;
-  max-width: 900px;
+  max-width: 1000px;
   margin: 0 auto;
 }
 
 .foto-placeholder {
-  background: linear-gradient(135deg, #e8d5b8, #d4b88a);
+  background: linear-gradient(135deg, #d4b89a, #c87456);
   aspect-ratio: 1;
-  border-radius: 16px;
+  border-radius: 24px;
+  transition: transform 0.3s;
 }
+
+.foto-placeholder:hover { transform: scale(1.02); }
 
 /* BLOG */
 .lista-posts {
-  max-width: 750px;
+  max-width: 800px;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 18px;
 }
 
 .post {
   background: #fdf8f3;
-  padding: 28px;
-  border-radius: 20px;
-  box-shadow: 0 5px 20px rgba(107,68,35,0.05);
+  padding: 32px;
+  border-radius: 24px;
+  border: 1px solid rgba(200, 116, 86, 0.12);
+  transition: all 0.25s;
+}
+
+.seccion-clara .post { background: #fdf8f3; }
+
+.post:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 32px rgba(122, 92, 70, 0.1);
 }
 
 .post-fecha {
-  color: #7a8f5e;
-  font-size: 0.85em;
-  font-weight: 600;
-  letter-spacing: 0.5px;
+  color: #c87456;
+  font-size: 0.78em;
+  font-weight: 700;
+  letter-spacing: 0.15em;
   text-transform: uppercase;
 }
 
 .post h3 {
   font-family: 'Fraunces', serif;
-  color: #6b4423;
+  color: #3d2f24;
   font-size: 1.4em;
+  font-weight: 600;
   margin: 10px 0 14px;
+  letter-spacing: -0.3px;
 }
 
 .leer-mas {
-  color: #c87456;
+  color: #7a8f5e;
   text-decoration: none;
-  font-weight: 600;
-  border-bottom: 2px solid #c87456;
+  font-weight: 700;
+  font-size: 0.9em;
+  border-bottom: 2px solid #7a8f5e;
   padding-bottom: 2px;
 }
 
-/* REDES */
+/* REDES — píldoras */
 .iconos-redes {
   display: flex;
-  gap: 14px;
+  gap: 12px;
   justify-content: center;
   flex-wrap: wrap;
 }
 
 .red-social {
-  background: #c87456;
-  color: white;
+  background: #fdf8f3;
+  color: #3d2f24;
   padding: 14px 28px;
-  border-radius: 50px;
+  border-radius: 999px;
   text-decoration: none;
   font-weight: 600;
+  border: 1px solid rgba(200, 116, 86, 0.2);
   transition: all 0.2s;
+  font-size: 0.92em;
 }
 
 .red-social:hover {
-  background: #7a8f5e;
+  background: #c87456;
+  color: #fdf8f3;
+  border-color: #c87456;
   transform: translateY(-2px);
 }
 
 /* FOOTER */
 footer {
-  background: #6b4423;
-  color: white;
-  padding: 50px 24px;
+  background: #3d2f24;
+  color: rgba(253, 248, 243, 0.75);
+  padding: 60px 28px;
   text-align: center;
 }
 
@@ -832,33 +1025,45 @@ footer {
 
 .footer-content h3 {
   font-family: 'Fraunces', serif;
-  font-size: 1.6em;
-  margin-bottom: 12px;
+  font-size: 1.5em;
+  margin-bottom: 14px;
+  font-weight: 600;
+  color: #fdf8f3;
 }
 
-.footer-content p { margin-bottom: 8px; opacity: 0.85; }
-.footer-content a { color: #f5e9d8; text-decoration: none; }
+.footer-content p { margin-bottom: 8px; font-size: 0.92em; }
+
+.footer-content a { color: #c87456; text-decoration: none; font-weight: 600; }
 
 .footer-copy {
-  margin-top: 24px !important;
-  padding-top: 24px;
-  border-top: 1px solid rgba(255,255,255,0.15);
-  font-size: 0.85em;
-  opacity: 0.7;
+  margin-top: 28px !important;
+  padding-top: 28px;
+  border-top: 1px solid rgba(253, 248, 243, 0.1);
+  font-size: 0.8em;
+  opacity: 0.55;
 }
 
 /* RESPONSIVO */
+@media (max-width: 900px) {
+  .hero-grid {
+    grid-template-columns: 1fr;
+    gap: 48px;
+  }
+  .hero-visual { order: -1; }
+  .hero-foto { max-width: 340px; aspect-ratio: 1; }
+  .hero-texto { text-align: center; max-width: 100%; }
+}
+
 @media (max-width: 768px) {
-  .hero h1 { font-size: 2.4em; }
-  .hero .lema { font-size: 1.1em; }
-  h2 { font-size: 1.9em; }
-  .seccion { padding: 64px 20px; }
+  .hero { padding: 40px 20px 60px; min-height: auto; }
+  .seccion { padding: 70px 20px; }
+  .nav-container { padding: 0 20px; }
 
   .hamburger { display: flex; }
 
   .nav-links {
     position: fixed;
-    top: 70px;
+    top: 72px;
     left: 0;
     right: 0;
     bottom: 0;
@@ -866,31 +1071,42 @@ footer {
     flex-direction: column;
     align-items: stretch;
     gap: 0;
-    padding: 16px 0;
+    padding: 20px 0;
     overflow-y: auto;
     transform: translateX(100%);
     transition: transform 0.3s ease;
+    border-top: 1px solid rgba(200, 116, 86, 0.15);
   }
 
   .menu-toggle:checked ~ .navbar .nav-links { transform: translateX(0); }
 
   .nav-link {
-    padding: 16px 24px;
-    border-bottom: 1px solid #ebe0d2;
-    font-size: 1.05em;
+    padding: 18px 28px;
+    border-bottom: 1px solid rgba(200, 116, 86, 0.1);
+    font-size: 1em;
   }
 
   .menu-toggle:checked ~ .navbar .hamburger span:nth-child(1) {
-    transform: rotate(45deg) translate(7px, 7px);
+    transform: rotate(45deg) translate(6px, 6px);
   }
   .menu-toggle:checked ~ .navbar .hamburger span:nth-child(2) { opacity: 0; }
   .menu-toggle:checked ~ .navbar .hamburger span:nth-child(3) {
-    transform: rotate(-45deg) translate(7px, -7px);
+    transform: rotate(-45deg) translate(6px, -6px);
   }
 
   .grid-3 { grid-template-columns: 1fr; }
   .grid-galeria { grid-template-columns: repeat(2, 1fr); }
-  .metodos-donacion { flex-direction: column; align-items: center; }
+  .metodos-donacion { flex-direction: column; align-items: stretch; }
+
+  .paso {
+    border-radius: 24px;
+    flex-direction: row;
+    align-items: flex-start;
+  }
+  .paso-numero { width: 40px; height: 40px; min-width: 40px; }
+
+  .evento-fecha { padding: 18px; min-width: 84px; }
+  .fecha-dia { font-size: 1.5em; }
 }
 `;
 }
