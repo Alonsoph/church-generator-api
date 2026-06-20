@@ -6,11 +6,12 @@ const { generarPlantillaAcogedora } = require('./plantilla-acogedora');
 const { generarPlantillaCatedral } = require('./plantilla-catedral');
 const { generarPlantillaTransmision } = require('./plantilla-transmision');
 const { generarPlantillaMision } = require('./plantilla-mision');
+const { generarPlantillaPlaza } = require('./plantilla-plaza');
 
 function seleccionarPlantilla(respuestas) {
   const { estilo, audiencia, tono } = respuestas;
 
-  // Catedral, Transmisión y Misión solo se acceden por selector manual.
+  // Catedral, Transmisión, Misión y Plaza solo se acceden por selector manual.
   const puntajes = { reverente: 0, contemporanea: 0, acogedora: 0 };
 
   if (estilo === 'tradicional') puntajes.reverente += 3;
@@ -44,6 +45,8 @@ function generarHTML(plantilla, datos, contenido) {
       return generarPlantillaTransmision(datos, contenido);
     case 'mision':
       return generarPlantillaMision(datos, contenido);
+    case 'plaza':
+      return generarPlantillaPlaza(datos, contenido);
     case 'reverente':
     default:
       return generarPlantillaReverente(datos, contenido);
