@@ -3,6 +3,7 @@
 const { generarPlantillaReverente } = require('./plantilla-reverente');
 const { generarPlantillaContemporanea } = require('./plantilla-contemporanea');
 const { generarPlantillaAcogedora } = require('./plantilla-acogedora');
+const { generarPlantillaCatedral } = require('./plantilla-catedral');
 
 function seleccionarPlantilla(respuestas) {
   // respuestas = { estilo, audiencia, tono }
@@ -13,6 +14,8 @@ function seleccionarPlantilla(respuestas) {
   const { estilo, audiencia, tono } = respuestas;
 
   // Sistema de puntajes — cada respuesta aporta puntos a una plantilla
+  // NOTA: Catedral no participa en la asignación automática.
+  // Solo está disponible vía el selector manual del paso 2 (preview).
   const puntajes = { reverente: 0, contemporanea: 0, acogedora: 0 };
 
   // Estilo de iglesia
@@ -44,6 +47,8 @@ function generarHTML(plantilla, datos, contenido) {
       return generarPlantillaContemporanea(datos, contenido);
     case 'acogedora':
       return generarPlantillaAcogedora(datos, contenido);
+    case 'catedral':
+      return generarPlantillaCatedral(datos, contenido);
     case 'reverente':
     default:
       return generarPlantillaReverente(datos, contenido);
