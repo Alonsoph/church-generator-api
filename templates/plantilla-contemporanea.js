@@ -1,4 +1,4 @@
-// Plantilla CONTEMPORÁNEA: sans-serif moderno, verde menta + grafito, estilo Linear/Apple
+// Plantilla CONTEMPORÁNEA: sans-serif moderno, verde menta + grafito, estilo Linear/Vercel
 
 function generarPlantilla(datos, contenido) {
   const nombre = datos.iglesia?.nombre || 'Iglesia';
@@ -87,8 +87,9 @@ ${cssBase()}
   </div>
 </nav>
 
-<header class="hero" ${fotoPrincipal ? `style="background-image: linear-gradient(rgba(20,30,40,0.6), rgba(20,30,40,0.6)), url('${fotoPrincipal}')"` : ''}>
+<header class="hero" ${fotoPrincipal ? `style="background-image: linear-gradient(rgba(20,30,40,0.7), rgba(20,30,40,0.6)), url('${fotoPrincipal}')"` : ''}>
   <div class="hero-content">
+    <span class="hero-tag">Bienvenido</span>
     <h1>${nombre}</h1>
     <p class="lema">${lema}</p>
     <a href="#contacto" class="btn-cta">${contenido.hero_cta || 'Conócenos'}</a>
@@ -127,8 +128,11 @@ function seccionHorarios(c, direccion, ciudad) {
   return `
 <section id="horarios" class="seccion">
   <div class="contenedor">
-    <h2>Horarios y ubicación</h2>
-    <p class="subtitulo">${c.horarios_intro || 'Te esperamos cada semana'}</p>
+    <div class="seccion-header">
+      <span class="seccion-tag">01 · Visítanos</span>
+      <h2>Horarios y ubicación</h2>
+      <p class="subtitulo">${c.horarios_intro || 'Te esperamos cada semana'}</p>
+    </div>
     <div class="grid-3">
       ${horarios.map(h => `
         <div class="card">
@@ -143,7 +147,7 @@ function seccionHorarios(c, direccion, ciudad) {
     </div>
     ${direccion ? `
     <div class="mapa-contenedor">
-      <iframe src="${mapaSrc}" width="100%" height="400" style="border:0;border-radius:8px;" allowfullscreen="" loading="lazy"></iframe>
+      <iframe src="${mapaSrc}" width="100%" height="400" style="border:0;border-radius:6px;" allowfullscreen="" loading="lazy"></iframe>
     </div>
     ` : ''}
   </div>
@@ -159,8 +163,11 @@ function seccionPredicaciones(c) {
   return `
 <section id="predicaciones" class="seccion seccion-clara">
   <div class="contenedor">
-    <h2>Predicaciones</h2>
-    <p class="subtitulo">${c.predicaciones_intro || 'Escucha y crece en tu fe'}</p>
+    <div class="seccion-header">
+      <span class="seccion-tag">02 · Mensajes</span>
+      <h2>Predicaciones</h2>
+      <p class="subtitulo">${c.predicaciones_intro || 'Escucha y crece en tu fe'}</p>
+    </div>
     <div class="grid-3">
       ${predicaciones.map(p => `
         <div class="card">
@@ -183,19 +190,25 @@ function seccionEventos(c) {
   return `
 <section id="eventos" class="seccion">
   <div class="contenedor">
-    <h2>Próximos eventos</h2>
-    <p class="subtitulo">${c.eventos_intro || 'No te pierdas nuestras actividades'}</p>
+    <div class="seccion-header">
+      <span class="seccion-tag">03 · Agenda</span>
+      <h2>Próximos eventos</h2>
+      <p class="subtitulo">${c.eventos_intro || 'No te pierdas nuestras actividades'}</p>
+    </div>
     <div class="lista-eventos">
       ${eventos.map(e => `
         <div class="evento">
-          <div class="evento-fecha">
+          <div class="evento-fecha-text">
             <span class="fecha-dia">${e.fecha_dia}</span>
             <span class="fecha-mes">${e.fecha_mes}</span>
           </div>
           <div class="evento-info">
             <h3>${e.titulo}</h3>
-            <span class="evento-hora">${e.hora} hrs</span>
           </div>
+          <div class="evento-hora-col">
+            <span class="evento-hora">${e.hora}</span>
+          </div>
+          <div class="evento-flecha">→</div>
         </div>
       `).join('')}
     </div>
@@ -207,8 +220,11 @@ function seccionTransmision(c) {
   return `
 <section id="transmision" class="seccion seccion-clara">
   <div class="contenedor">
-    <h2>Transmisión en vivo</h2>
-    <p class="subtitulo">${c.transmision_intro || 'Acompáñanos desde donde estés'}</p>
+    <div class="seccion-header">
+      <span class="seccion-tag">04 · En vivo</span>
+      <h2>Transmisión en vivo</h2>
+      <p class="subtitulo">${c.transmision_intro || 'Acompáñanos desde donde estés'}</p>
+    </div>
     <div class="video-placeholder">
       <p>Aquí se mostrará la transmisión en vivo</p>
       <p class="nota">${c.transmision_nota || 'Transmitimos cada domingo a las 10:00 AM'}</p>
@@ -226,8 +242,11 @@ function seccionMinisterios(c) {
   return `
 <section id="ministerios" class="seccion">
   <div class="contenedor">
-    <h2>Ministerios</h2>
-    <p class="subtitulo">${c.ministerios_intro || 'Hay un lugar para ti'}</p>
+    <div class="seccion-header">
+      <span class="seccion-tag">05 · Comunidad</span>
+      <h2>Ministerios</h2>
+      <p class="subtitulo">${c.ministerios_intro || 'Hay un lugar para ti'}</p>
+    </div>
     <div class="grid-3">
       ${ministerios.map(m => `
         <div class="card">
@@ -245,8 +264,11 @@ function seccionContacto(whatsappLink) {
   return `
 <section id="contacto" class="seccion seccion-clara">
   <div class="contenedor">
-    <h2>Contáctanos</h2>
-    <p class="subtitulo">Estamos aquí para ti</p>
+    <div class="seccion-header">
+      <span class="seccion-tag">06 · Conecta</span>
+      <h2>Contáctanos</h2>
+      <p class="subtitulo">Estamos aquí para ti</p>
+    </div>
     <div class="form-contacto">
       <input type="text" placeholder="Tu nombre">
       <input type="email" placeholder="Tu correo">
@@ -267,8 +289,11 @@ function seccionNuevos(c) {
   return `
 <section id="nuevos" class="seccion">
   <div class="contenedor">
-    <h2>¿Es tu primera vez?</h2>
-    <p class="subtitulo">${c.nuevos_intro || 'Queremos que te sientas como en casa'}</p>
+    <div class="seccion-header">
+      <span class="seccion-tag">07 · Bienvenida</span>
+      <h2>¿Es tu primera vez?</h2>
+      <p class="subtitulo">${c.nuevos_intro || 'Queremos que te sientas como en casa'}</p>
+    </div>
     <div class="lista-pasos">
       ${pasos.map((p, i) => `
         <div class="paso">
@@ -285,8 +310,11 @@ function seccionDonaciones(c) {
   return `
 <section id="donaciones" class="seccion seccion-clara">
   <div class="contenedor">
-    <h2>Donaciones</h2>
-    <p class="subtitulo">${c.donaciones_intro || 'Tu generosidad sostiene la obra'}</p>
+    <div class="seccion-header">
+      <span class="seccion-tag">08 · Apoyo</span>
+      <h2>Donaciones</h2>
+      <p class="subtitulo">${c.donaciones_intro || 'Tu generosidad sostiene la obra'}</p>
+    </div>
     <div class="metodos-donacion">
       <div class="metodo">Transferencia</div>
       <div class="metodo">Tarjeta</div>
@@ -301,8 +329,11 @@ function seccionGaleria() {
   return `
 <section id="galeria" class="seccion">
   <div class="contenedor">
-    <h2>Galería</h2>
-    <p class="subtitulo">Momentos de nuestra comunidad</p>
+    <div class="seccion-header">
+      <span class="seccion-tag">09 · Imágenes</span>
+      <h2>Galería</h2>
+      <p class="subtitulo">Momentos de nuestra comunidad</p>
+    </div>
     <div class="grid-galeria">
       ${Array(6).fill().map(() => `<div class="foto-placeholder"></div>`).join('')}
     </div>
@@ -319,8 +350,11 @@ function seccionBlog(c) {
   return `
 <section id="blog" class="seccion seccion-clara">
   <div class="contenedor">
-    <h2>Devocionales</h2>
-    <p class="subtitulo">${c.blog_intro || 'Alimenta tu espíritu cada semana'}</p>
+    <div class="seccion-header">
+      <span class="seccion-tag">10 · Lecturas</span>
+      <h2>Devocionales</h2>
+      <p class="subtitulo">${c.blog_intro || 'Alimenta tu espíritu cada semana'}</p>
+    </div>
     <div class="lista-posts">
       ${posts.map(p => `
         <div class="post">
@@ -338,8 +372,11 @@ function seccionRedes(whatsappLink) {
   return `
 <section id="redes" class="seccion">
   <div class="contenedor">
-    <h2>Síguenos</h2>
-    <p class="subtitulo">Conéctate con nosotros</p>
+    <div class="seccion-header">
+      <span class="seccion-tag">11 · Redes</span>
+      <h2>Síguenos</h2>
+      <p class="subtitulo">Conéctate con nosotros</p>
+    </div>
     <div class="iconos-redes">
       <a href="#" class="red-social">Facebook</a>
       <a href="#" class="red-social">Instagram</a>
@@ -366,17 +403,18 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* NAVBAR */
+/* NAVBAR translúcido */
 .menu-toggle { display: none; }
 
 .navbar {
   position: sticky;
   top: 0;
-  background: rgba(255,255,255,0.95);
-  backdrop-filter: blur(10px);
-  border-bottom: 1px solid #eef0f2;
+  background: rgba(255,255,255,0.8);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(238,240,242,0.7);
   z-index: 1000;
-  height: 64px;
+  height: 60px;
 }
 
 .nav-container {
@@ -389,10 +427,10 @@ body {
   justify-content: space-between;
 }
 
-.logo { height: 36px; width: auto; }
+.logo { height: 32px; width: auto; }
 
 .logo-text {
-  font-size: 1.05em;
+  font-size: 1em;
   font-weight: 600;
   color: #1a1f2e;
   letter-spacing: -0.02em;
@@ -408,7 +446,7 @@ body {
   color: #5a6573;
   text-decoration: none;
   font-weight: 500;
-  font-size: 0.9em;
+  font-size: 0.875em;
   transition: color 0.2s;
 }
 
@@ -426,51 +464,68 @@ body {
   width: 22px;
   height: 2px;
   background: #1a1f2e;
-  border-radius: 2px;
+  border-radius: 1px;
   transition: all 0.3s;
 }
 
-/* HERO */
+/* HERO alineado a la izquierda */
 .hero {
-  min-height: 80vh;
+  min-height: 85vh;
   background-size: cover;
   background-position: center;
-  background-color: #1a1f2e;
+  background-color: #0f1419;
   display: flex;
   align-items: center;
-  justify-content: center;
-  text-align: center;
+  justify-content: flex-start;
   color: white;
   padding: 80px 24px;
 }
 
-.hero-content { max-width: 700px; }
+.hero-content {
+  max-width: 720px;
+  margin-left: clamp(24px, 8vw, 120px);
+  text-align: left;
+}
+
+.hero-tag {
+  display: inline-block;
+  color: #4ec9b0;
+  font-size: 0.8em;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+  padding: 6px 12px;
+  border: 1px solid rgba(78, 201, 176, 0.3);
+  border-radius: 4px;
+}
 
 .hero h1 {
-  font-size: 4em;
+  font-size: clamp(2.6em, 5.5vw, 4.4em);
   font-weight: 700;
   margin-bottom: 24px;
-  letter-spacing: -0.03em;
-  line-height: 1.05;
+  letter-spacing: -0.035em;
+  line-height: 1.02;
 }
 
 .hero .lema {
-  font-size: 1.2em;
-  margin-bottom: 48px;
-  opacity: 0.85;
+  font-size: 1.15em;
+  margin-bottom: 40px;
+  opacity: 0.75;
   font-weight: 400;
   letter-spacing: -0.01em;
+  max-width: 560px;
 }
 
 .btn-cta {
   display: inline-block;
   background: #4ec9b0;
   color: #0f1419;
-  padding: 14px 32px;
-  border-radius: 8px;
+  padding: 13px 28px;
+  border-radius: 4px;
   text-decoration: none;
   font-weight: 600;
-  font-size: 0.95em;
+  font-size: 0.92em;
   transition: all 0.2s;
   border: none;
   cursor: pointer;
@@ -484,96 +539,114 @@ body {
 
 /* SECCIONES */
 .seccion {
-  padding: 100px 24px;
-  scroll-margin-top: 80px;
+  padding: 110px 24px;
+  scroll-margin-top: 70px;
 }
 
 .seccion-clara { background: #f7f8fa; }
 
 .contenedor { max-width: 1100px; margin: 0 auto; }
 
+/* Header de sección alineado a la izquierda */
+.seccion-header {
+  margin-bottom: 56px;
+  max-width: 700px;
+}
+
+.seccion-tag {
+  display: inline-block;
+  color: #4ec9b0;
+  font-size: 0.78em;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+  font-variant-numeric: tabular-nums;
+}
+
 h2 {
-  font-size: 2.6em;
+  font-size: clamp(2em, 3.8vw, 2.8em);
   color: #1a1f2e;
-  text-align: center;
-  margin-bottom: 16px;
+  margin-bottom: 14px;
   font-weight: 700;
-  letter-spacing: -0.03em;
-  line-height: 1.1;
+  letter-spacing: -0.035em;
+  line-height: 1.05;
+  text-align: left;
 }
 
 .subtitulo {
-  text-align: center;
   color: #5a6573;
-  font-size: 1.1em;
-  margin-bottom: 60px;
+  font-size: 1.05em;
   font-weight: 400;
+  letter-spacing: -0.005em;
+  text-align: left;
 }
 
-/* CARDS */
+/* CARDS más angulosas */
 .grid-3 {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
+  gap: 16px;
 }
 
 .card {
   background: white;
-  padding: 32px;
-  border-radius: 12px;
+  padding: 28px;
+  border-radius: 6px;
   border: 1px solid #eef0f2;
-  transition: all 0.3s;
+  transition: all 0.2s;
 }
 
 .card:hover {
-  border-color: #4ec9b0;
-  transform: translateY(-2px);
+  border-color: #1a1f2e;
 }
 
 .card h3 {
   color: #1a1f2e;
-  font-size: 1.15em;
-  margin-bottom: 12px;
+  font-size: 1.1em;
+  margin-bottom: 10px;
   font-weight: 600;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.015em;
 }
 
-.card p { color: #5a6573; margin-bottom: 12px; font-size: 0.95em; }
+.card p { color: #5a6573; margin-bottom: 12px; font-size: 0.92em; }
 
 .card .meta {
   display: block;
   color: #4ec9b0;
-  font-size: 0.85em;
+  font-size: 0.82em;
   font-weight: 500;
-  margin-top: 12px;
+  margin-top: 10px;
+  letter-spacing: -0.005em;
 }
 
 .btn-secundario {
   background: transparent;
   color: #1a1f2e;
   border: 1px solid #d0d5dc;
-  padding: 8px 18px;
-  border-radius: 6px;
+  padding: 7px 16px;
+  border-radius: 4px;
   font-weight: 500;
   cursor: pointer;
-  margin-top: 16px;
-  transition: all 0.2s;
-  font-size: 0.85em;
+  margin-top: 14px;
+  transition: all 0.15s;
+  font-size: 0.82em;
   font-family: inherit;
 }
 
 .btn-secundario:hover {
-  border-color: #4ec9b0;
-  color: #4ec9b0;
+  border-color: #1a1f2e;
+  background: #1a1f2e;
+  color: white;
 }
 
 /* UBICACIÓN */
 .ubicacion-box {
   background: white;
   max-width: 600px;
-  margin: 40px auto 0;
-  padding: 24px;
-  border-radius: 12px;
+  margin: 32px auto 0;
+  padding: 22px 24px;
+  border-radius: 6px;
   border: 1px solid #eef0f2;
   display: flex;
   flex-direction: column;
@@ -582,56 +655,91 @@ h2 {
 
 .ubicacion-box strong {
   color: #4ec9b0;
-  font-size: 0.85em;
+  font-size: 0.78em;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.1em;
   font-weight: 600;
 }
 
-.ubicacion-box span { color: #1a1f2e; font-size: 1.05em; }
+.ubicacion-box span { color: #1a1f2e; font-size: 1em; }
 
 .mapa-contenedor {
   max-width: 900px;
   margin: 32px auto 0;
 }
 
-/* EVENTOS */
+/* EVENTOS en filas con líneas separadoras */
 .lista-eventos {
-  max-width: 750px;
+  max-width: 850px;
   margin: 0 auto;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
+  border-top: 1px solid #eef0f2;
 }
 
 .evento {
-  display: flex;
+  display: grid;
+  grid-template-columns: 100px 1fr auto 40px;
   align-items: center;
-  background: white;
-  border-radius: 12px;
-  overflow: hidden;
-  border: 1px solid #eef0f2;
-  transition: all 0.2s;
+  gap: 24px;
+  padding: 22px 4px;
+  border-bottom: 1px solid #eef0f2;
+  transition: padding 0.2s, background 0.2s;
 }
 
-.evento:hover { border-color: #4ec9b0; }
+.evento:hover {
+  padding-left: 12px;
+  padding-right: 12px;
+  background: rgba(78, 201, 176, 0.04);
+}
 
-.evento-fecha {
-  background: #1a1f2e;
-  color: white;
-  padding: 20px 24px;
-  text-align: center;
-  min-width: 90px;
+.evento-fecha-text {
   display: flex;
   flex-direction: column;
+  line-height: 1.2;
 }
 
-.fecha-dia { font-size: 1.8em; font-weight: 700; line-height: 1; }
-.fecha-mes { font-size: 0.7em; opacity: 0.7; margin-top: 4px; letter-spacing: 0.1em; }
+.fecha-dia {
+  font-size: 1.8em;
+  font-weight: 700;
+  color: #1a1f2e;
+  letter-spacing: -0.04em;
+  font-variant-numeric: tabular-nums;
+}
 
-.evento-info { padding: 18px 24px; }
-.evento-info h3 { font-size: 1.1em; font-weight: 600; }
-.evento-hora { color: #4ec9b0; font-weight: 500; font-size: 0.85em; }
+.fecha-mes {
+  font-size: 0.72em;
+  color: #4ec9b0;
+  letter-spacing: 0.15em;
+  margin-top: -2px;
+  font-weight: 600;
+}
+
+.evento-info h3 {
+  font-size: 1.1em;
+  font-weight: 600;
+  color: #1a1f2e;
+  letter-spacing: -0.015em;
+}
+
+.evento-hora-col { text-align: right; }
+
+.evento-hora {
+  color: #5a6573;
+  font-weight: 500;
+  font-size: 0.92em;
+  font-variant-numeric: tabular-nums;
+}
+
+.evento-flecha {
+  color: #d0d5dc;
+  font-size: 1.2em;
+  text-align: right;
+  transition: color 0.2s, transform 0.2s;
+}
+
+.evento:hover .evento-flecha {
+  color: #4ec9b0;
+  transform: translateX(4px);
+}
 
 /* VIDEO */
 .video-placeholder {
@@ -639,12 +747,12 @@ h2 {
   color: white;
   max-width: 750px;
   margin: 0 auto;
-  border-radius: 12px;
+  border-radius: 6px;
   padding: 80px 40px;
   text-align: center;
 }
 
-.video-placeholder p { font-size: 1.1em; margin-bottom: 8px; }
+.video-placeholder p { font-size: 1.05em; margin-bottom: 8px; }
 .video-placeholder .nota { font-size: 0.85em; opacity: 0.6; }
 
 /* FORMULARIO */
@@ -653,14 +761,14 @@ h2 {
   margin: 0 auto;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
 }
 
 .form-contacto input,
 .form-contacto textarea {
-  padding: 14px 16px;
+  padding: 13px 16px;
   border: 1px solid #d0d5dc;
-  border-radius: 8px;
+  border-radius: 4px;
   font-size: 0.95em;
   font-family: inherit;
   background: white;
@@ -670,7 +778,7 @@ h2 {
 .form-contacto input:focus,
 .form-contacto textarea:focus {
   outline: none;
-  border-color: #4ec9b0;
+  border-color: #1a1f2e;
 }
 
 .btn-whatsapp {
@@ -678,142 +786,148 @@ h2 {
   color: white;
   text-decoration: none;
   padding: 14px;
-  border-radius: 8px;
+  border-radius: 4px;
   font-weight: 600;
   text-align: center;
   transition: background 0.2s;
-  font-size: 0.95em;
+  font-size: 0.92em;
+  margin-top: 4px;
 }
 
 .btn-whatsapp:hover { background: #4ec9b0; color: #0f1419; }
 
 /* PASOS NUEVOS */
 .lista-pasos {
-  max-width: 650px;
+  max-width: 700px;
   margin: 0 auto;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
+  border-top: 1px solid #eef0f2;
 }
 
 .paso {
   display: flex;
   align-items: flex-start;
-  gap: 24px;
-  padding: 24px;
-  border-radius: 12px;
-  border: 1px solid #eef0f2;
+  gap: 28px;
+  padding: 24px 4px;
+  border-bottom: 1px solid #eef0f2;
 }
 
 .paso-numero {
   color: #4ec9b0;
-  font-size: 1.3em;
+  font-size: 1.1em;
   font-weight: 700;
   letter-spacing: -0.02em;
-  min-width: 40px;
+  min-width: 36px;
+  font-variant-numeric: tabular-nums;
+  padding-top: 2px;
 }
 
-.paso p { flex: 1; padding-top: 4px; color: #1a1f2e; }
+.paso p { flex: 1; padding-top: 2px; color: #1a1f2e; font-size: 0.98em; }
 
 /* DONACIONES */
 .metodos-donacion {
   display: flex;
-  gap: 12px;
+  gap: 10px;
   justify-content: center;
   flex-wrap: wrap;
-  margin-bottom: 40px;
+  margin-bottom: 36px;
 }
 
 .metodo {
   background: white;
-  padding: 18px 28px;
-  border-radius: 8px;
+  padding: 16px 24px;
+  border-radius: 4px;
   border: 1px solid #eef0f2;
   color: #1a1f2e;
   font-weight: 500;
-  font-size: 0.95em;
+  font-size: 0.92em;
 }
 
 #donaciones { text-align: center; }
+#donaciones .seccion-header { text-align: left; }
 #donaciones .btn-cta { margin: 0 auto; }
 
 /* GALERIA */
 .grid-galeria {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
-  max-width: 900px;
+  gap: 8px;
+  max-width: 1000px;
   margin: 0 auto;
 }
 
 .foto-placeholder {
   background: linear-gradient(135deg, #e8f4f0, #d4ebe3);
   aspect-ratio: 1;
-  border-radius: 8px;
+  border-radius: 4px;
 }
 
 /* BLOG */
 .lista-posts {
-  max-width: 750px;
+  max-width: 800px;
   margin: 0 auto;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
+  border-top: 1px solid #eef0f2;
 }
 
 .post {
-  background: white;
-  padding: 28px;
-  border-radius: 12px;
-  border: 1px solid #eef0f2;
-  transition: border-color 0.2s;
+  padding: 28px 4px;
+  border-bottom: 1px solid #eef0f2;
+  transition: padding 0.2s, background 0.2s;
 }
 
-.post:hover { border-color: #4ec9b0; }
+.post:hover {
+  padding-left: 12px;
+  padding-right: 12px;
+  background: rgba(78, 201, 176, 0.04);
+}
 
 .post-fecha {
   color: #4ec9b0;
-  font-size: 0.8em;
+  font-size: 0.78em;
   font-weight: 600;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
 }
 
 .post h3 {
   color: #1a1f2e;
   font-size: 1.2em;
-  margin: 10px 0 14px;
+  margin: 8px 0 12px;
   font-weight: 600;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.02em;
 }
 
 .leer-mas {
   color: #4ec9b0;
   text-decoration: none;
   font-weight: 600;
-  font-size: 0.9em;
+  font-size: 0.88em;
 }
 
 /* REDES */
 .iconos-redes {
   display: flex;
-  gap: 12px;
-  justify-content: center;
+  gap: 10px;
+  justify-content: flex-start;
   flex-wrap: wrap;
 }
 
 .red-social {
-  background: #1a1f2e;
-  color: white;
-  padding: 12px 24px;
-  border-radius: 8px;
+  background: white;
+  color: #1a1f2e;
+  padding: 11px 22px;
+  border-radius: 4px;
+  border: 1px solid #d0d5dc;
   text-decoration: none;
   font-weight: 500;
-  transition: all 0.2s;
-  font-size: 0.9em;
+  transition: all 0.15s;
+  font-size: 0.88em;
 }
 
-.red-social:hover { background: #4ec9b0; color: #0f1419; }
+.red-social:hover {
+  background: #1a1f2e;
+  color: white;
+  border-color: #1a1f2e;
+}
 
 /* FOOTER */
 footer {
@@ -826,33 +940,38 @@ footer {
 .footer-content { max-width: 600px; margin: 0 auto; }
 
 .footer-content h3 {
-  font-size: 1.2em;
+  font-size: 1.15em;
   margin-bottom: 12px;
   font-weight: 600;
+  letter-spacing: -0.02em;
 }
 
-.footer-content p { margin-bottom: 8px; opacity: 0.6; font-size: 0.9em; }
+.footer-content p { margin-bottom: 8px; opacity: 0.55; font-size: 0.88em; }
 .footer-content a { color: #4ec9b0; text-decoration: none; }
 
 .footer-copy {
   margin-top: 24px !important;
   padding-top: 24px;
-  border-top: 1px solid rgba(255,255,255,0.08);
-  font-size: 0.8em;
+  border-top: 1px solid rgba(255,255,255,0.06);
+  font-size: 0.78em;
 }
 
 /* RESPONSIVO */
 @media (max-width: 768px) {
-  .hero h1 { font-size: 2.4em; }
-  .hero .lema { font-size: 1em; }
-  h2 { font-size: 1.9em; }
-  .seccion { padding: 64px 20px; }
+  .hero { min-height: 70vh; padding: 60px 20px; }
+  .hero-content { margin-left: 0; }
+  .hero h1 { font-size: 2.2em; }
+  .hero .lema { font-size: 0.98em; }
+
+  h2 { font-size: 1.7em; }
+  .seccion { padding: 70px 20px; }
+  .seccion-header { margin-bottom: 40px; }
 
   .hamburger { display: flex; }
 
   .nav-links {
     position: fixed;
-    top: 64px;
+    top: 60px;
     left: 0;
     right: 0;
     bottom: 0;
@@ -884,7 +1003,14 @@ footer {
 
   .grid-3 { grid-template-columns: 1fr; }
   .grid-galeria { grid-template-columns: repeat(2, 1fr); }
-  .metodos-donacion { flex-direction: column; align-items: center; }
+  .metodos-donacion { flex-direction: column; align-items: stretch; }
+
+  .evento {
+    grid-template-columns: 70px 1fr auto;
+    gap: 16px;
+  }
+  .evento-flecha { display: none; }
+  .fecha-dia { font-size: 1.4em; }
 }
 `;
 }
