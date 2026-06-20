@@ -15,6 +15,8 @@ app.use(express.json({ limit: '10mb' }));
 const iglesiasRoutes = require('./routes/iglesias');
 
 app.use('/api/iglesias', iglesiasRoutes);
+const misionerosRouter = require('./routes/misioneros');
+app.use('/api/misioneros', misionerosRouter);
 
 
 module.exports = app;
