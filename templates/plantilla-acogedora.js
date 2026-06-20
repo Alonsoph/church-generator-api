@@ -389,9 +389,7 @@ body {
 .navbar {
   position: sticky;
   top: 0;
-  background: rgba(253, 248, 243, 0.92);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  background: #fdf8f3;
   z-index: 1000;
   height: 72px;
 }
