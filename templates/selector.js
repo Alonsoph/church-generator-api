@@ -4,6 +4,7 @@ const { generarPlantillaReverente } = require('./plantilla-reverente');
 const { generarPlantillaContemporanea } = require('./plantilla-contemporanea');
 const { generarPlantillaAcogedora } = require('./plantilla-acogedora');
 const { generarPlantillaCatedral } = require('./plantilla-catedral');
+const { generarPlantillaTransmision } = require('./plantilla-transmision');
 
 function seleccionarPlantilla(respuestas) {
   // respuestas = { estilo, audiencia, tono }
@@ -49,6 +50,8 @@ function generarHTML(plantilla, datos, contenido) {
       return generarPlantillaAcogedora(datos, contenido);
     case 'catedral':
       return generarPlantillaCatedral(datos, contenido);
+      case 'transmision':
+      return generarPlantillaTransmision(datos, contenido);
     case 'reverente':
     default:
       return generarPlantillaReverente(datos, contenido);
