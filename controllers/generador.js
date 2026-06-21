@@ -458,6 +458,7 @@ exports.mostrarPreview = (req, res) => {
   res.send(construirHTML(datosEjemplo));
 };
 
+
 // ============================================
 // APROBACIÓN
 // ============================================
@@ -474,10 +475,17 @@ exports.aprobarIglesia = async (req, res) => {
       codigo_referencia,
     } = req.body;
 
+    // Si el cliente dejó sugerencias, las guardamos también en observaciones
+    // con prefijo para distinguirlas de las notas que agregue el admin después.
+    let observacionesIniciales = null;
+    if (sugerencias_cliente && sugerencias_cliente.trim()) {
+      observacionesIniciales = `[Cliente al aprobar] ${sugerencias_cliente.trim()}`;
+    }
+
     const result = await pool.query(
       `INSERT INTO iglesias_aprobadas 
-      (nombre_iglesia, email_contacto, whatsapp_contacto, html_generado, sugerencias_cliente, plan_seleccionado, codigo_referencia)
-      VALUES ($1, $2, $3, $4, $5, $6, $7)
+      (nombre_iglesia, email_contacto, whatsapp_contacto, html_generado, sugerencias_cliente, plan_seleccionado, codigo_referencia, observaciones)
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
       RETURNING id, fecha_creacion`,
       [
         nombre_iglesia,
@@ -487,6 +495,7 @@ exports.aprobarIglesia = async (req, res) => {
         sugerencias_cliente,
         plan_seleccionado,
         codigo_referencia || null,
+        observacionesIniciales,
       ]
     );
 
@@ -504,7 +513,6 @@ exports.aprobarIglesia = async (req, res) => {
     });
   }
 };
-
 exports.listarPendientes = async (req, res) => {
   const pool = require('../config/db');
   try {
