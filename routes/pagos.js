@@ -12,7 +12,7 @@ const FLOW_API_URL = process.env.FLOW_ENV === 'production'
 const FLOW_API_KEY = process.env.FLOW_API_KEY;
 const FLOW_SECRET_KEY = process.env.FLOW_SECRET_KEY;
 
-const BACKEND_URL = process.env.BACKEND_URL || 'https://church-generator-api-production.up.railway.app'\;
+const BACKEND_URL = process.env.BACKEND_URL || 'https://church-generator-api-production.up.railway.app';
 const FRONTEND_URL = process.env.FRONTEND_URL || 'https://church-generator-frontend.verce
 cat > ~/church-generator-api/routes/pagos.js << 'ENDOFFILE'
 const express = require('express');
@@ -29,8 +29,8 @@ const FLOW_API_URL = process.env.FLOW_ENV === 'production'
 const FLOW_API_KEY = process.env.FLOW_API_KEY;
 const FLOW_SECRET_KEY = process.env.FLOW_SECRET_KEY;
 
-const BACKEND_URL = process.env.BACKEND_URL || 'https://church-generator-api-production.up.railway.app'\;
-const FRONTEND_URL = process.env.FRONTEND_URL || 'https://church-generator-frontend.vercel.app'\;
+const BACKEND_URL = process.env.BACKEND_URL || 'https://church-generator-api-production.up.railway.app';
+const FRONTEND_URL = process.env.FRONTEND_URL || 'https://church-generator-frontend.vercel.app';
 
 const pool = require('../config/db');
 
@@ -129,8 +129,8 @@ const FLOW_API_URL = process.env.FLOW_ENV === 'production'
 const FLOW_API_KEY = process.env.FLOW_API_KEY;
 const FLOW_SECRET_KEY = process.env.FLOW_SECRET_KEY;
 
-const BACKEND_URL = process.env.BACKEND_URL || 'https://church-generator-api-production.up.railway.app'\;
-const FRONTEND_URL = process.env.FRONTEND_URL || 'https://church-generator-frontend.vercel.app'\;
+const BACKEND_URL = process.env.BACKEND_URL || 'https://church-generator-api-production.up.railway.app';
+const FRONTEND_URL = process.env.FRONTEND_URL || 'https://church-generator-frontend.vercel.app';
 
 const pool = require('../config/db');
 
