@@ -153,7 +153,7 @@ router.post('/confirmar', async (req, res) => {
       `UPDATE iglesias_aprobadas 
        SET estado_pago = $1,
            fecha_pago = CASE WHEN $1 = 'pagado' THEN NOW() ELSE fecha_pago END,
-           medio_pago = $2
+           medio_pago = COALESCE($2::text, medio_pago)
        WHERE commerce_order = $3`,
       [estadoPago, paymentData.paymentData?.media || null, paymentData.commerceOrder]
     );
