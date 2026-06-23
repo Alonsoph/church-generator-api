@@ -18,4 +18,7 @@ app.use('/api/iglesias', iglesiasRoutes);
 const misionerosRouter = require('./routes/misioneros');
 app.use('/api/misioneros', misionerosRouter);
 
+const pagosRouter = require("./routes/pagos");
+app.use("/api/pagos/flow", pagosRouter);
+
 module.exports = app;
