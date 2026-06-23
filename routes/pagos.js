@@ -7,7 +7,7 @@ const { firmarParams } = require('../utils/flowSign');
 
 const FLOW_API_URL = process.env.FLOW_ENV === 'production'
   ? 'https://www.flow.cl/api'
-  : 'https://sandbox.flow.cl/api'\;
+  : 'https://sandbox.flow.cl/api';
 
 const FLOW_API_KEY = process.env.FLOW_API_KEY;
 const FLOW_SECRET_KEY = process.env.FLOW_SECRET_KEY;
@@ -24,7 +24,7 @@ const { firmarParams } = require('../utils/flowSign');
 
 const FLOW_API_URL = process.env.FLOW_ENV === 'production'
   ? 'https://www.flow.cl/api'
-  : 'https://sandbox.flow.cl/api'\;
+  : 'https://sandbox.flow.cl/api';
 
 const FLOW_API_KEY = process.env.FLOW_API_KEY;
 const FLOW_SECRET_KEY = process.env.FLOW_SECRET_KEY;
@@ -124,7 +124,7 @@ const { firmarParams } = require('../utils/flowSign');
 
 const FLOW_API_URL = process.env.FLOW_ENV === 'production'
   ? 'https://www.flow.cl/api'
-  : 'https://sandbox.flow.cl/api'\;
+  : 'https://sandbox.flow.cl/api';
 
 const FLOW_API_KEY = process.env.FLOW_API_KEY;
 const FLOW_SECRET_KEY = process.env.FLOW_SECRET_KEY;
