@@ -149,13 +149,15 @@ router.post('/confirmar', async (req, res) => {
     }
 
     // Actualizar estado del pago
+    const fechaPagoSQL = estadoPago === 'pagado' ? 'NOW()' : 'fecha_pago';
+    const medio = paymentData.paymentData?.media || null;
     await pool.query(
       `UPDATE iglesias_aprobadas 
-       SET estado_pago = $1,
-           fecha_pago = CASE WHEN $1::text = 'pagado' THEN NOW() ELSE fecha_pago END,
+       SET estado_pago = $1::text,
+           fecha_pago = ${fechaPagoSQL},
            medio_pago = COALESCE($2::text, medio_pago)
-       WHERE commerce_order = $3`,
-      [estadoPago, paymentData.paymentData?.media || null, paymentData.commerceOrder]
+       WHERE commerce_order = $3::text`,
+      [estadoPago, medio, paymentData.commerceOrder]
     );
 
     // Si el pago fue exitoso, generar comisión del misionero
