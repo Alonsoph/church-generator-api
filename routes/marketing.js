@@ -11,7 +11,7 @@ const { generarVoz } = require("../services/marketing/generadorVoz");
 const { generarImagenMockAntes } = require("../services/marketing/generadorMockAntes");
 const { montarVideoCompleto, subirACloudinary } = require("../services/marketing/montadorVideo");
 
-const BASE_URL = process.env.BASE_URL || "https://church-generator-api-production.up.railway.app"\;
+const BASE_URL = process.env.BASE_URL || "https://church-generator-api-production.up.railway.app";
 
 router.post("/video", async (req, res) => {
   const { iglesiaId } = req.body;
