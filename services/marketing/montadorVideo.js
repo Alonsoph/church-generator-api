@@ -63,13 +63,15 @@ async function montarVideoCompleto({ imagenAntes, videoDespues, audioVoz, frases
       "-map", "[video_final]",
       "-map", tieneMusica ? "[audio_final]" : "2:a",
       "-c:v libx264",
-      "-preset fast",
-      "-crf 23",
+      "-preset ultrafast",
+      "-crf 28",
+      "-threads 1",
       "-c:a aac",
-      "-b:a 128k",
+      "-b:a 96k",
       "-t 21",
       "-pix_fmt yuv420p",
       "-movflags +faststart",
+      "-vf scale=720:1280",
     ]);
 
     cmd.output(outputPath)
