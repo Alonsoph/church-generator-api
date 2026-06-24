@@ -47,8 +47,8 @@ async function montarVideoCompleto({ imagenAntes, videoDespues, audioVoz, frases
 
     // Filtro: concatenar imagen + video, mezclar audios, agregar subs
     const filtros = [
-      "[0:v]scale=1080:1920,setsar=1,fade=t=out:st=2.5:d=0.5[antes]",
-      "[1:v]scale=1080:1920,setsar=1,fade=t=in:st=0:d=0.5[despues]",
+      "[0:v]scale=720:1280,setsar=1,fade=t=out:st=2.5:d=0.5[antes]",
+      "[1:v]scale=720:1280,setsar=1,fade=t=in:st=0:d=0.5[despues]",
       "[antes][despues]concat=n=2:v=1:a=0[video_concat]",
       `[video_concat]subtitles=${srtPath}:force_style='FontName=Arial,FontSize=22,PrimaryColour=&HFFFFFF&,OutlineColour=&H000000&,BorderStyle=1,Outline=2,Shadow=1,MarginV=80'[video_final]`,
     ];
@@ -71,7 +71,6 @@ async function montarVideoCompleto({ imagenAntes, videoDespues, audioVoz, frases
       "-t 21",
       "-pix_fmt yuv420p",
       "-movflags +faststart",
-      "-vf scale=720:1280",
     ]);
 
     cmd.output(outputPath)
