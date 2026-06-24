@@ -5,7 +5,7 @@ const https = require("https");
 const replicate = new Replicate({ auth: process.env.REPLICATE_API_TOKEN });
 
 // Sample público de narrador masculino cálido en español (Mozilla Common Voice)
-const VOZ_REFERENCIA_URL = "https://replicate.delivery/pbxt/Jt79Lt2nLrrwCJW5SbQyycwfHGYjpDeFG2J5RaitfFaXz3UM/male.wav";
+const VOZ_REFERENCIA_URL = "https://res.cloudinary.com/dz9vkjmgu/video/upload/v1782306236/TTSOL-es-CL-Lorenzo-20260624-085938_pzu7xw.mp3";
 
 async function generarVoz(texto, outputPath) {
   console.log("[Voz] Generando audio XTTS...");
