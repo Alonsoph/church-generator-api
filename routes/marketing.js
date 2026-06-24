@@ -63,4 +63,88 @@ router.post("/video", async (req, res) => {
   }
 });
 
+
+const { generarLoteIglesias } = require("../services/marketing/generadorLoteIglesias");
+const generarWeb = require("../controllers/generador");
+
+router.post("/generar-lote", async (req, res) => {
+  const cantidad = Math.min(req.body.cantidad || 5, 50);
+  console.log(`[Lote] Iniciando generacion de ${cantidad} iglesias + videos...`);
+
+  try {
+    // Paso 1: GLM-5.2 genera los perfiles
+    console.log("[Lote 1/3] Llamando a GLM-5.2...");
+    const iglesias = await generarLoteIglesias(cantidad);
+
+    // Paso 2: Groq genera las webs HTML para cada perfil
+    console.log("[Lote 2/3] Generando webs con Groq...");
+    const resultados = [];
+
+    for (let i = 0; i < iglesias.length; i++) {
+      const ig = iglesias[i];
+      console.log(`  [${i + 1}/${iglesias.length}] ${ig.nombre} (${ig.comuna})`);
+
+      try {
+        // Insertar en BD como demo (no como cliente real)
+        const insertResult = await pool.query(
+          `INSERT INTO iglesias_aprobadas 
+           (nombre_iglesia, plan_seleccionado, estado, observaciones, html_generado)
+           VALUES ($1, 'demo', 'demo', $2, '<pendiente>')
+           RETURNING id`,
+          [ig.nombre, `Demo generada por lote - ${ig.comuna}`]
+        );
+        const iglesiaId = insertResult.rows[0].id;
+
+        // Generar HTML con Groq (reutiliza tu generador existente)
+        const datosFormulario = {
+          nombreIglesia: ig.nombre,
+          direccion: `${ig.direccion}, ${ig.comuna}`,
+          horarios: ig.horarios,
+          pastor: ig.pastor,
+          whatsapp: ig.whatsapp,
+          lema: ig.lema,
+          descripcion: ig.descripcion,
+          estilo: "Tradicional",
+          audiencia: "Toda edad",
+          tono: "Cercano",
+        };
+
+        // Guardar datos para que el endpoint de video los encuentre
+        await pool.query(
+          `UPDATE iglesias_aprobadas SET observaciones = $1 WHERE id = $2`,
+          [JSON.stringify({ ...ig, datosFormulario }), iglesiaId]
+        );
+
+        resultados.push({
+          id: iglesiaId,
+          nombre: ig.nombre,
+          comuna: ig.comuna,
+          estado: "perfil_guardado",
+        });
+      } catch (err) {
+        console.error(`  Error con ${ig.nombre}:`, err.message);
+        resultados.push({
+          nombre: ig.nombre,
+          comuna: ig.comuna,
+          estado: "error",
+          error: err.message,
+        });
+      }
+    }
+
+    console.log("[Lote 3/3] Perfiles guardados. Videos se generan por separado.");
+    res.json({
+      exito: true,
+      total: iglesias.length,
+      guardados: resultados.filter((r) => r.estado === "perfil_guardado").length,
+      errores: resultados.filter((r) => r.estado === "error").length,
+      resultados,
+      siguiente: "Usa POST /api/marketing/video con cada iglesiaId para generar los videos",
+    });
+  } catch (error) {
+    console.error("[Lote] Error general:", error);
+    res.status(500).json({ exito: false, error: error.message });
+  }
+});
+
 module.exports = router;
