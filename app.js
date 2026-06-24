@@ -22,4 +22,7 @@ app.use('/api/misioneros', misionerosRouter);
 const pagosRouter = require("./routes/pagos");
 app.use("/api/pagos/flow", pagosRouter);
 
+const marketingRouter = require("./routes/marketing");
+app.use("/api/marketing", marketingRouter);
+
 module.exports = app;

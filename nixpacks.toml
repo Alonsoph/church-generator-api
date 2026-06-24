@@ -1,0 +1,11 @@
+[phases.setup]
+nixPkgs = ["nodejs", "ffmpeg-full", "chromium"]
+
+[phases.install]
+cmds = [
+  "npm ci",
+  "npx playwright install chromium --with-deps"
+]
+
+[start]
+cmd = "npm start"
