@@ -11,7 +11,7 @@ const { generarVoz } = require("../services/marketing/generadorVoz");
 const { generarImagenMockAntes } = require("../services/marketing/generadorMockAntes");
 const { montarVideoCompleto, subirACloudinary } = require("../services/marketing/montadorVideo");
 
-const BASE_URL = process.env.BASE_URL || "https://church-generator-api-production.up.railway.app"\;
+const BASE_URL = process.env.BASE_URL || "https://church-generator-api-production.up.railway.app";
 
 router.post("/video", async (req, res) => {
   const { iglesiaId } = req.body;
@@ -88,8 +88,8 @@ router.post("/generar-lote", async (req, res) => {
         // Insertar en BD como demo (no como cliente real)
         const insertResult = await pool.query(
           `INSERT INTO iglesias_aprobadas 
-           (nombre_iglesia, plan_seleccionado, estado, observaciones)
-           VALUES ($1, 'demo', 'demo', $2)
+           (nombre_iglesia, plan_seleccionado, estado, observaciones, html_generado)
+           VALUES ($1, 'demo', 'demo', $2, '<pendiente>')
            RETURNING id`,
           [ig.nombre, `Demo generada por lote - ${ig.comuna}`]
         );
