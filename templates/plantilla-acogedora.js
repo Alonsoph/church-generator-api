@@ -68,6 +68,16 @@ function generarPlantilla(datos, contenido) {
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>${nombre}</title>
+<meta property="og:title" content="${nombre}">
+<meta property="og:description" content="${lema || 'Iglesia evangélica en Chile'}">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://${nombre.toLowerCase().replace(/\s+/g, '-')}.tuwebiglesia.cl">
+<meta property="og:image" content="${fotoPrincipal || logo || 'https://tuwebiglesia.cl/og-default.jpg'}">
+<meta property="og:locale" content="es_CL">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="${nombre}">
+<meta name="twitter:description" content="${lema || 'Iglesia evangélica en Chile'}">
+<meta name="twitter:image" content="${fotoPrincipal || logo || 'https://tuwebiglesia.cl/og-default.jpg'}">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@400;500;600;700&family=Nunito+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
