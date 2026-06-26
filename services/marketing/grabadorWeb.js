@@ -17,7 +17,7 @@ async function grabarScrollWeb(urlWeb, outputPath, duracionSegundos = 12) {
   });
 
   const page = await context.newPage();
-  await page.goto(urlWeb, { waitUntil: "networkidle", timeout: 30000 });
+  await page.goto(urlWeb, { waitUntil: "load", timeout: 60000 });
   await page.waitForTimeout(1000);
 
   const alturaTotal = await page.evaluate(() => document.body.scrollHeight);

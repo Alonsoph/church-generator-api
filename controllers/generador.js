@@ -543,14 +543,14 @@ exports.servirWebIglesia = async (req, res) => {
   try {
     const { id } = req.params;
     const result = await pool.query(
-      'SELECT html_generado FROM iglesias_aprobadas WHERE id = $1',
+      'SELECT html_final, html_generado FROM iglesias_aprobadas WHERE id = $1',
       [id]
     );
     if (result.rows.length === 0) {
       return res.status(404).send('Iglesia no encontrada');
     }
     res.setHeader('Content-Type', 'text/html; charset=utf-8');
-    res.send(result.rows[0].html_generado);
+    res.send(result.rows[0].html_final || result.rows[0].html_generado);
   } catch (error) {
     console.error('Error sirviendo web:', error);
     res.status(500).send('Error interno');
