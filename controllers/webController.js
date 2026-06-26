@@ -106,7 +106,7 @@ async function servirWebPorDominio(req, res) {
     }
     const slug = host.replace('.tuwebiglesia.cl', '').replace(/-/g, ' ').toLowerCase();
     const result = await pool.query(
-      'SELECT id, nombre_iglesia, plantilla_usada FROM iglesias_aprobadas WHERE LOWER(nombre_iglesia) LIKE $1 LIMIT 1',
+      'SELECT id, nombre_iglesia FROM iglesias_aprobadas WHERE LOWER(nombre_iglesia) LIKE $1 LIMIT 1',
       [slug + '%']
     );
     if (result.rows.length === 0) return res.status(404).send('<h1>Iglesia no encontrada</h1>');
@@ -114,7 +114,7 @@ async function servirWebPorDominio(req, res) {
     const contenidoBD = await getContenido(iglesia.id);
     const contenido = transformarContenido(contenidoBD);
     const datos = construirDatos(contenidoBD, iglesia);
-    const plantilla = iglesia.plantilla_usada || 'reverente';
+    const plantilla = 'reverente';
     const html = generarHTML(plantilla, datos, contenido);
     setCache(host, html);
     res.setHeader('Content-Type', 'text/html; charset=utf-8');
@@ -130,13 +130,13 @@ async function servirWebPorId(req, res) {
     const { id } = req.params;
     const cached = getCache('id-' + id);
     if (cached) return res.setHeader('Content-Type', 'text/html; charset=utf-8').send(cached);
-    const result = await pool.query('SELECT id, nombre_iglesia, plantilla_usada FROM iglesias_aprobadas WHERE id = $1', [id]);
+    const result = await pool.query('SELECT id, nombre_iglesia FROM iglesias_aprobadas WHERE id = $1', [id]);
     if (result.rows.length === 0) return res.status(404).send('No encontrada');
     const iglesia = result.rows[0];
     const contenidoBD = await getContenido(iglesia.id);
     const contenido = transformarContenido(contenidoBD);
     const datos = construirDatos(contenidoBD, iglesia);
-    const html = generarHTML(iglesia.plantilla_usada || 'reverente', datos, contenido);
+    const html = generarHTML('reverente', datos, contenido);
     setCache('id-' + id, html);
     res.setHeader('Content-Type', 'text/html; charset=utf-8');
     res.send(html);
