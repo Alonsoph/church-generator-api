@@ -26,6 +26,8 @@ const marketingRouter = require("./routes/marketing");
 app.use("/api/marketing", marketingRouter);
 
 const panelRoutes = require('./routes/panel');
+const webRoutes = require('./routes/web');
+app.use('/api/web', webRoutes);
 app.use('/api/panel', panelRoutes);
 
 module.exports = app;

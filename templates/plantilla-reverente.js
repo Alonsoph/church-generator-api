@@ -292,17 +292,37 @@ function seccionNuevos(c) {
 }
 
 function seccionDonaciones(c) {
-  return `
-<section id="donaciones" class="seccion">
-  <div class="contenedor">
-    <h2>Donaciones y Ofrendas</h2>
-    <p class="subtitulo">${c.donaciones_intro || 'Tu generosidad sostiene la obra'}</p>
+  // Si hay datos bancarios, mostrarlos
+  const tieneDatosBancarios = c.banco || c.numero_cuenta || c.titular;
+  
+  let donacionHTML = '';
+  
+  if (tieneDatosBancarios) {
+    donacionHTML = `
+    <div class="datos-bancarios">
+      ${c.banco ? `<div class="dato-bancario"><strong>Banco:</strong> ${c.banco}</div>` : ''}
+      ${c.tipo_cuenta ? `<div class="dato-bancario"><strong>Tipo de cuenta:</strong> ${c.tipo_cuenta}</div>` : ''}
+      ${c.numero_cuenta ? `<div class="dato-bancario"><strong>Número de cuenta:</strong> ${c.numero_cuenta}</div>` : ''}
+      ${c.titular ? `<div class="dato-bancario"><strong>Titular:</strong> ${c.titular}</div>` : ''}
+      ${c.rut ? `<div class="dato-bancario"><strong>RUT:</strong> ${c.rut}</div>` : ''}
+      ${c.email_donaciones ? `<div class="dato-bancario"><strong>Email:</strong> ${c.email_donaciones}</div>` : ''}
+    </div>`;
+  } else {
+    donacionHTML = `
     <div class="metodos-donacion">
       <div class="metodo">Transferencia Bancaria</div>
       <div class="metodo">Tarjeta de Crédito</div>
       <div class="metodo">Pago Móvil</div>
     </div>
-    <button class="btn-cta">Quiero Donar</button>
+    <button class="btn-cta">Quiero Donar</button>`;
+  }
+  
+  return `
+<section id="donaciones" class="seccion">
+  <div class="contenedor">
+    <h2>Donaciones y Ofrendas</h2>
+    <p class="subtitulo">${c.donaciones_intro || 'Tu generosidad sostiene la obra'}</p>
+    ${donacionHTML}
   </div>
 </section>`;
 }
@@ -740,6 +760,36 @@ h2 {
 
 #donaciones { text-align: center; }
 #donaciones .btn-cta { margin: 0 auto; }
+
+.datos-bancarios {
+  max-width: 500px;
+  margin: 0 auto 40px;
+  background: white;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.06);
+  text-align: left;
+}
+
+.dato-bancario {
+  padding: 12px 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.dato-bancario:last-child {
+  border-bottom: none;
+}
+
+.dato-bancario strong {
+  color: #1e3a5f;
+  display: block;
+  font-size: 0.85em;
+  margin-bottom: 4px;
+}
+
+.dato-bancario strong::after {
+  content: none;
+}
 
 /* ============ GALERIA ============ */
 .grid-galeria {

@@ -1,5 +1,6 @@
 // controllers/panelController.js
 const pool = require('../config/db');
+const { clearCache } = require('./webController');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { JWT_SECRET } = require('../middleware/panelAuth');
@@ -190,6 +191,7 @@ async function updateContenido(req, res) {
       [iglesiaId, mesActual]
     );
 
+    clearCache(iglesiaId);
     res.json({ ok: true, mensaje: 'Contenido actualizado' });
   } catch (err) {
     console.error('Error actualizando contenido:', err);
@@ -229,6 +231,7 @@ async function subirFoto(req, res) {
       [iglesiaId, clave, JSON.stringify({ url, descripcion: descripcion || '' }), totalFotos + 1]
     );
 
+    clearCache(iglesiaId);
     res.json({
       ok: true,
       mensaje: 'Foto guardada',
@@ -256,6 +259,7 @@ async function eliminarFoto(req, res) {
        WHERE iglesia_id = $1 AND seccion_slug = 'galeria' AND clave = $2`,
       [iglesiaId, clave]
     );
+    clearCache(iglesiaId);
     res.json({ ok: true, mensaje: 'Foto eliminada' });
   } catch (err) {
     console.error('Error eliminando foto:', err);
