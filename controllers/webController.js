@@ -84,12 +84,12 @@ function transformarContenido(contenidoBD) {
   return c;
 }
 
-function construirDatos(contenidoBD, iglesia) {
+function construirDatos(contenidoBD, iglesia, logoOG) {
   return {
     iglesia: { nombre: contenidoBD.hero?.nombre_iglesia || iglesia.nombre_iglesia, lema: contenidoBD.hero?.lema || '' },
     ubicacion: { direccion: contenidoBD.ubicacion?.direccion || contenidoBD.contacto?.direccion || '', ciudad: '' },
     redes_sociales: { whatsapp: contenidoBD.contacto?.telefono || '', email: contenidoBD.contacto?.email || '', youtube: contenidoBD.contacto?.youtube || '', instagram: contenidoBD.contacto?.instagram || '', facebook: contenidoBD.contacto?.facebook || '' },
-    multimedia: { logo: '', fotoPrincipal: '' },
+    multimedia: { logo: logoOG || '', fotoPrincipal: logoOG || '' },
     funcionalidades_activas: { horarios_ubicacion: true, biblioteca_sermones: true, calendario_eventos: true, transmision_vivo: true, ministerios: true, formulario_contacto: true, pagina_nuevos_visitantes: true, donaciones: true, galeria_fotos: true, redes_sociales: true }
   };
 }
@@ -113,8 +113,13 @@ async function servirWebPorDominio(req, res) {
     const iglesia = result.rows[0];
     const contenidoBD = await getContenido(iglesia.id);
     const contenido = transformarContenido(contenidoBD);
-    const datos = construirDatos(contenidoBD, iglesia);
+    const datos = construirDatos(contenidoBD, iglesia, logoOG);
     const plantilla = 'reverente';
+    
+    // Logo OG para Casa de Dios Alto Hospicio
+    const logoOG = iglesia.id === 34 
+      ? 'https://tuwebiglesia.cl/logo-casa-de-dios.png' 
+      : 'https://tuwebiglesia.cl/og-default.jpg';
     const html = generarHTML(plantilla, datos, contenido);
     setCache(host, html);
     res.setHeader('Content-Type', 'text/html; charset=utf-8');
@@ -135,7 +140,10 @@ async function servirWebPorId(req, res) {
     const iglesia = result.rows[0];
     const contenidoBD = await getContenido(iglesia.id);
     const contenido = transformarContenido(contenidoBD);
-    const datos = construirDatos(contenidoBD, iglesia);
+    const datos = construirDatos(contenidoBD, iglesia, logoOG);
+    const logoOG = iglesia.id === 34 
+      ? 'https://tuwebiglesia.cl/logo-casa-de-dios.png' 
+      : 'https://tuwebiglesia.cl/og-default.jpg';
     const html = generarHTML('reverente', datos, contenido);
     setCache('id-' + id, html);
     res.setHeader('Content-Type', 'text/html; charset=utf-8');
