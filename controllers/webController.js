@@ -1,4 +1,4 @@
-// controllers/webController.js
+/iecu// controllers/webController.js
 const pool = require('../config/db');
 const { generarHTML } = require('../templates/selector');
 
@@ -111,16 +111,16 @@ async function servirWebPorDominio(req, res) {
     );
     if (result.rows.length === 0) return res.status(404).send('<h1>Iglesia no encontrada</h1>');
     const iglesia = result.rows[0];
-    const contenidoBD = await getContenido(iglesia.id);
-    const contenido = transformarContenido(contenidoBD);
-    const datos = construirDatos(contenidoBD, iglesia, logoOG);
-    const plantilla = 'reverente';
     
     // Logo OG para Casa de Dios Alto Hospicio
     const logoOG = iglesia.id === 34 
       ? 'https://tuwebiglesia.cl/logo-casa-de-dios.png' 
       : 'https://tuwebiglesia.cl/og-default.jpg';
-    const html = generarHTML(plantilla, datos, contenido);
+    
+    const contenidoBD = await getContenido(iglesia.id);
+    const contenido = transformarContenido(contenidoBD);
+    const datos = construirDatos(contenidoBD, iglesia, logoOG);
+    const html = generarHTML('reverente', datos, contenido);
     setCache(host, html);
     res.setHeader('Content-Type', 'text/html; charset=utf-8');
     res.send(html);
@@ -138,12 +138,15 @@ async function servirWebPorId(req, res) {
     const result = await pool.query('SELECT id, nombre_iglesia FROM iglesias_aprobadas WHERE id = $1', [id]);
     if (result.rows.length === 0) return res.status(404).send('No encontrada');
     const iglesia = result.rows[0];
-    const contenidoBD = await getContenido(iglesia.id);
-    const contenido = transformarContenido(contenidoBD);
-    const datos = construirDatos(contenidoBD, iglesia, logoOG);
+    
+    // Logo OG para Casa de Dios Alto Hospicio
     const logoOG = iglesia.id === 34 
       ? 'https://tuwebiglesia.cl/logo-casa-de-dios.png' 
       : 'https://tuwebiglesia.cl/og-default.jpg';
+    
+    const contenidoBD = await getContenido(iglesia.id);
+    const contenido = transformarContenido(contenidoBD);
+    const datos = construirDatos(contenidoBD, iglesia, logoOG);
     const html = generarHTML('reverente', datos, contenido);
     setCache('id-' + id, html);
     res.setHeader('Content-Type', 'text/html; charset=utf-8');
