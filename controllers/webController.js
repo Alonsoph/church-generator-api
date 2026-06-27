@@ -1,4 +1,3 @@
-/iecu// controllers/webController.js
 const pool = require('../config/db');
 const { generarHTML } = require('../templates/selector');
 
