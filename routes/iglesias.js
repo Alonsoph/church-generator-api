@@ -12,8 +12,11 @@ router.post('/aprobar', generador.aprobarIglesia);
 router.get('/web/:id', generador.servirWebIglesia);
 
 // Admin (protegidos con token)
-router.get('/admin/pendientes', adminAuth, generador.listarPendientes);
-router.get('/admin/listar', adminAuth, iglesiasAdmin.listarIglesias);
+router.get('/admin/pendientes',       adminAuth, generador.listarPendientes);
+router.get('/admin/listar',           adminAuth, iglesiasAdmin.listarIglesias);
 router.post('/admin/:id/observacion', adminAuth, iglesiasAdmin.agregarObservacion);
+router.put('/admin/:id/dominio',      adminAuth, iglesiasAdmin.asignarDominio);
+router.get('/admin/:id/acceso',       adminAuth, iglesiasAdmin.getAccesoPastor);
+router.put('/admin/:id/plan',         adminAuth, iglesiasAdmin.cambiarPlan);
 
 module.exports = router;
