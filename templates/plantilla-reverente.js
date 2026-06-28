@@ -345,7 +345,7 @@ function seccionGaleria() {
     <h2>Galería</h2>
     <p class="subtitulo">Momentos de nuestra comunidad</p>
     <div class="grid-galeria">
-      ${Array(6).fill().map(() => `<div class="foto-placeholder"></div>`).join('')}
+      ${(c.galeria && c.galeria.length > 0) ? c.galeria.map(f => `<img src="${f.url}" alt="${f.descripcion || 'Foto'}" style="width:100%;border-radius:10px;object-fit:cover;aspect-ratio:1;">`).join('') : Array(6).fill().map(() => `<div class="foto-placeholder"></div>`).join('')}
     </div>
   </div>
 </section>`;
