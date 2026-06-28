@@ -19,6 +19,10 @@ function generarPlantilla(datos, contenido) {
     navLinks += `<a href="#horarios" class="nav-link">Horarios</a>`;
     secciones += seccionHorarios(contenido, direccion, ciudad);
   }
+  // Nosotros siempre visible
+  navLinks += `<a href="#nosotros" class="nav-link">Nosotros</a>`;
+  secciones += seccionNosotros(contenido);
+
   if (func.biblioteca_sermones) {
     navLinks += `<a href="#predicaciones" class="nav-link">Predicaciones</a>`;
     secciones += seccionPredicaciones(contenido);
@@ -126,6 +130,22 @@ ${secciones}
 // ============================================
 // SECCIONES INDIVIDUALES
 // ============================================
+
+function seccionNosotros(c) {
+  return `
+<section id="nosotros" class="seccion seccion-clara">
+  <div class="contenedor">
+    <h2>Nosotros</h2>
+    <div style="max-width:800px;margin:0 auto;text-align:center;">
+      ${c.foto_pastor ? `<img src="${c.foto_pastor}" alt="${c.pastor || 'Pastor'}" style="width:150px;height:150px;border-radius:50%;object-fit:cover;margin-bottom:1rem;">` : ''}
+      ${c.pastor ? `<h3 style="color:#1e3a5f;margin-bottom:0.5rem;">${c.pastor}</h3>` : ''}
+      ${c.historia ? `<p style="margin-bottom:1rem;line-height:1.7;color:#444;">${c.historia}</p>` : ''}
+      ${c.vision ? `<p style="margin-bottom:0.5rem;"><strong>Visión:</strong> ${c.vision}</p>` : ''}
+      ${c.mision ? `<p><strong>Misión:</strong> ${c.mision}</p>` : ''}
+    </div>
+  </div>
+</section>`;
+}
 
 function seccionHorarios(c, direccion, ciudad) {
   const horarios = c.horarios || [

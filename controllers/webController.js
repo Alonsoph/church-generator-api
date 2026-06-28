@@ -72,6 +72,11 @@ function transformarContenido(contenidoBD) {
   c.transmision_intro = contenidoBD.transmision?.transmision_intro || 'Acompáñanos desde donde estés';
   c.transmision_nota = contenidoBD.transmision?.transmision_nota || 'Transmitimos cada domingo';
   c.youtube_video_id = contenidoBD.transmision?.youtube_video_id || '';
+  c.historia = contenidoBD.nosotros?.historia || '';
+  c.vision = contenidoBD.nosotros?.vision || '';
+  c.mision = contenidoBD.nosotros?.mision || '';
+  c.pastor = contenidoBD.nosotros?.pastor || '';
+  c.foto_pastor = contenidoBD.nosotros?.foto_pastor || '';
   c.galeria = [];
   if (contenidoBD.galeria) {
     for (const [k, v] of Object.entries(contenidoBD.galeria)) {
