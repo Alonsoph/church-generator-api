@@ -24,6 +24,7 @@ const router_pastor = express.Router();
 
 // Público: login del pastor
 router_pub.post('/login', login);
+router_pub.post('/crear-acceso', adminAuth, crearAcceso);
 
 // ── Protegido por JWT del pastor ──
 
@@ -56,7 +57,7 @@ router.use('/', router_pub);
 router.use('/', panelAuth, router_pastor);
 
 // ── Protegido por admin token ──
-router.post('/crear-acceso', adminAuth, crearAcceso);
+// crear-acceso movido a router_pub
 
 module.exports = router;
 
