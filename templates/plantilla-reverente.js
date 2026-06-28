@@ -57,7 +57,7 @@ function generarPlantilla(datos, contenido) {
   }
   if (func.redes_sociales) {
     navLinks += `<a href="#redes" class="nav-link">Redes</a>`;
-    secciones += seccionRedes(whatsappLink);
+    secciones += seccionRedes(whatsappLink, datos.redes_sociales || {});
   }
 
   return `<!DOCTYPE html>
@@ -375,17 +375,17 @@ function seccionBlog(c) {
 </section>`;
 }
 
-function seccionRedes(whatsappLink) {
+function seccionRedes(whatsappLink, redes) {
   return `
 <section id="redes" class="seccion seccion-clara">
   <div class="contenedor">
     <h2>Síguenos</h2>
     <p class="subtitulo">Conéctate con nosotros</p>
     <div class="iconos-redes">
-      <a href="#" class="red-social">Facebook</a>
-      <a href="#" class="red-social">Instagram</a>
-      <a href="#" class="red-social">YouTube</a>
-      <a href="${whatsappLink}" class="red-social">WhatsApp</a>
+      ${redes.facebook ? `<a href="${redes.facebook}" target="_blank" class="red-social">Facebook</a>` : ''}
+      ${redes.instagram ? `<a href="${redes.instagram}" target="_blank" class="red-social">Instagram</a>` : ''}
+      ${redes.youtube ? `<a href="${redes.youtube}" target="_blank" class="red-social">YouTube</a>` : ''}
+      <a href="${whatsappLink}" target="_blank" class="red-social">WhatsApp</a>
     </div>
   </div>
 </section>`;
