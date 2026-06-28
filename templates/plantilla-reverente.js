@@ -49,7 +49,7 @@ function generarPlantilla(datos, contenido) {
   }
   if (func.galeria_fotos) {
     navLinks += `<a href="#galeria" class="nav-link">Galería</a>`;
-    secciones += seccionGaleria();
+    secciones += seccionGaleria(c);
   }
   if (func.blog_devocionales) {
     navLinks += `<a href="#blog" class="nav-link">Devocionales</a>`;
@@ -338,7 +338,7 @@ function seccionDonaciones(c) {
 </section>`;
 }
 
-function seccionGaleria() {
+function seccionGaleria(c) {
   return `
 <section id="galeria" class="seccion seccion-clara">
   <div class="contenedor">
