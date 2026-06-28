@@ -195,7 +195,7 @@ async function verVentas(req, res) {
     const ventas = await pool.query(`
       SELECT
         i.id              AS iglesia_id,
-        i.nombre          AS iglesia_nombre,
+        i.nombre_iglesia  AS iglesia_nombre,
         i.plan_seleccionado,
         i.codigo_referencia,
         i.fecha_creacion  AS iglesia_creada_en,
