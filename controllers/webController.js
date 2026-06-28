@@ -88,7 +88,7 @@ function construirDatos(contenidoBD, iglesia, logoOG) {
     iglesia: { nombre: contenidoBD.hero?.nombre_iglesia || iglesia.nombre_iglesia, lema: contenidoBD.hero?.lema || '' },
     ubicacion: { direccion: contenidoBD.ubicacion?.direccion || contenidoBD.contacto?.direccion || '', ciudad: '' },
     redes_sociales: { whatsapp: contenidoBD.contacto?.telefono || '', email: contenidoBD.contacto?.email || '', youtube: contenidoBD.contacto?.youtube || '', instagram: contenidoBD.contacto?.instagram || '', facebook: contenidoBD.contacto?.facebook || '' },
-    multimedia: { logo: logoOG || '', fotoPrincipal: logoOG || '' },
+    multimedia: { logo: logoOG || contenidoBD.hero?.foto_portada || '', fotoPrincipal: contenidoBD.hero?.foto_portada || logoOG || '' },
     funcionalidades_activas: { horarios_ubicacion: true, biblioteca_sermones: true, calendario_eventos: true, transmision_vivo: true, ministerios: true, formulario_contacto: true, pagina_nuevos_visitantes: true, donaciones: true, galeria_fotos: true, redes_sociales: true }
   };
 }

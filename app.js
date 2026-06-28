@@ -7,7 +7,7 @@ const app = express();
 app.use(cors({
   origin: '*',
   methods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'x-admin-token'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'x-admin-token'],
 }));
 app.options('*', cors());
 app.use(express.json({ limit: "10mb" }));
