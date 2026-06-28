@@ -230,7 +230,8 @@ function seccionTransmision(c) {
     <h2>Transmisión en Vivo</h2>
     <p class="subtitulo">${c.transmision_intro || 'Acompáñanos desde donde estés'}</p>
     <div class="video-placeholder">
-      <p>Aquí se mostrará la transmisión en vivo</p>
+      ${c.youtube_video_id ? `<iframe width="100%" height="400" src="https://www.youtube.com/embed/${c.youtube_video_id}" frameborder="0" allowfullscreen style="border-radius:12px;max-width:800px;"></iframe>` : `
+      <p>Aquí se mostrará la transmisión en vivo</p>`}
       <p class="nota">${c.transmision_nota || 'Transmitimos cada domingo a las 10:00 AM'}</p>
     </div>
   </div>
