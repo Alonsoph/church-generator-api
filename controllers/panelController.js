@@ -428,7 +428,7 @@ async function eliminarFoto(req, res) {
 async function listarAccesos(req, res) {
   try {
     const result = await pool.query(
-      `SELECT pa.id, pa.iglesia_id, pa.usuario, pa.creado_en, pa.ultimo_login,
+      `SELECT pa.id, pa.iglesia_id, pa.usuario, pa.password_plano, pa.creado_en, pa.ultimo_login,
               ia.nombre_iglesia
        FROM pastores_acceso pa
        LEFT JOIN iglesias_aprobadas ia ON ia.id = pa.iglesia_id
@@ -452,10 +452,10 @@ async function crearAcceso(req, res) {
   try {
     const hash = await bcrypt.hash(password, 10);
     await pool.query(
-      `INSERT INTO pastores_acceso (iglesia_id, usuario, password_hash)
-       VALUES ($1, $2, $3)
-       ON CONFLICT (usuario) DO UPDATE SET password_hash = $3`,
-      [iglesia_id, usuario.toLowerCase().trim(), hash]
+      `INSERT INTO pastores_acceso (iglesia_id, usuario, password_hash, password_plano)
+       VALUES ($1, $2, $3, $4)
+       ON CONFLICT (usuario) DO UPDATE SET password_hash = $3, password_plano = $4`,
+      [iglesia_id, usuario.toLowerCase().trim(), hash, password]
     );
 
     res.json({
