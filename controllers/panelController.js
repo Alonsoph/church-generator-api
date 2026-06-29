@@ -547,9 +547,11 @@ async function toggleSeccion(req, res) {
     );
     const mapa = {};
     seccionesEnBD.rows.forEach(r => { mapa[r.seccion_slug] = r.activa; });
+    const defaults = SECCIONES_DEFAULT[plan] || SECCIONES_DEFAULT.fe;
     let totalActivas = 0;
     TODAS_LAS_SECCIONES.forEach(s => {
       if (mapa[s] !== undefined) { if (mapa[s]) totalActivas++; }
+      else if (defaults.includes(s)) { totalActivas++; }
     });
     // Si ya esta en el limite y quiere activar una nueva
     if (totalActivas >= limite && mapa[seccion_slug] !== true) {
