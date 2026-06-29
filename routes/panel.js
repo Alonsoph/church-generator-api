@@ -10,6 +10,7 @@ const {
   subirFoto,
   eliminarFoto,
   crearAcceso,
+  listarAccesos,
   getSecciones,
   toggleSeccion,
   getDominio,
@@ -25,6 +26,7 @@ const router_pastor = express.Router();
 // Público: login del pastor
 router_pub.post('/login', login);
 router_pub.post('/crear-acceso', adminAuth, crearAcceso);
+router_pub.get('/accesos', adminAuth, listarAccesos);
 
 // ── Protegido por JWT del pastor ──
 

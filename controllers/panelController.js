@@ -266,6 +266,13 @@ async function getContenido(req, res) {
       contenidoPorSeccion[row.seccion_slug][row.clave] = row.valor;
     });
 
+    // Plantilla usada
+    const plantillaRes = await pool.query(
+      'SELECT plantilla_usada FROM iglesias_aprobadas WHERE id = $1',
+      [iglesiaId]
+    );
+    const plantillaUsada = plantillaRes.rows[0]?.plantilla_usada || 'reverente';
+
     res.json({
       contenido: contenidoPorSeccion,
       secciones: secciones.rows,
@@ -274,9 +281,11 @@ async function getContenido(req, res) {
         ediciones_limite: limites.ediciones === Infinity ? 'ilimitadas' : limites.ediciones,
         ediciones_restantes: limites.ediciones === Infinity ? 'ilimitadas' : Math.max(0, limites.ediciones - edicionesUsadas),
         fotos_usadas: parseInt(fotos.rows[0].total),
-        fotos_limite: limites.fotos
+        fotos_limite: limites.fotos,
+        secciones_limite: limites.secciones
       },
-      plan
+      plan,
+      plantilla: plantillaUsada
     });
   } catch (err) {
     console.error('Error obteniendo contenido:', err);
@@ -412,6 +421,23 @@ async function eliminarFoto(req, res) {
   } catch (err) {
     console.error('Error eliminando foto:', err);
     res.status(500).json({ error: 'Error al eliminar la foto' });
+  }
+}
+
+// ── LISTAR ACCESOS DE PASTOR (admin only) ──
+async function listarAccesos(req, res) {
+  try {
+    const result = await pool.query(
+      `SELECT pa.id, pa.iglesia_id, pa.usuario, pa.creado_en, pa.ultimo_login,
+              ia.nombre_iglesia
+       FROM pastores_acceso pa
+       LEFT JOIN iglesias_aprobadas ia ON ia.id = pa.iglesia_id
+       ORDER BY pa.creado_en DESC`
+    );
+    res.json({ accesos: result.rows });
+  } catch (err) {
+    console.error('Error listando accesos:', err);
+    res.status(500).json({ error: 'Error al listar accesos' });
   }
 }
 
@@ -722,6 +748,7 @@ module.exports = {
   subirFoto,
   eliminarFoto,
   crearAcceso,
+  listarAccesos,
   getSecciones,
   toggleSeccion,
   getDominio,
