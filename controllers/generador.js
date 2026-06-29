@@ -473,6 +473,7 @@ exports.aprobarIglesia = async (req, res) => {
       sugerencias_cliente,
       plan_seleccionado,
       codigo_referencia,
+      plantilla,
     } = req.body;
 
     // Si el cliente dejó sugerencias, las guardamos también en observaciones
@@ -484,8 +485,8 @@ exports.aprobarIglesia = async (req, res) => {
 
     const result = await pool.query(
       `INSERT INTO iglesias_aprobadas 
-      (nombre_iglesia, email_contacto, whatsapp_contacto, html_generado, sugerencias_cliente, plan_seleccionado, codigo_referencia, observaciones)
-      VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+      (nombre_iglesia, email_contacto, whatsapp_contacto, html_generado, sugerencias_cliente, plan_seleccionado, codigo_referencia, observaciones, plantilla_usada)
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
       RETURNING id, fecha_creacion`,
       [
         nombre_iglesia,
@@ -496,6 +497,7 @@ exports.aprobarIglesia = async (req, res) => {
         plan_seleccionado,
         codigo_referencia || null,
         observacionesIniciales,
+        plantilla || 'reverente',
       ]
     );
 
