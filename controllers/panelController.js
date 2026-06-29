@@ -749,20 +749,48 @@ async function getPreview(req, res) {
     if (iglesiaRes.rows.length === 0) return res.status(404).json({ error: 'Iglesia no encontrada' });
     const iglesia = iglesiaRes.rows[0];
 
+    // Obtener secciones activas
+    const seccionesRes = await pool.query(
+      'SELECT seccion_slug, activa FROM secciones_iglesia WHERE iglesia_id = $1',
+      [iglesiaId]
+    );
+    const mapaActivas = {};
+    seccionesRes.rows.forEach(r => { mapaActivas[r.seccion_slug] = r.activa; });
+    const plan = req.pastor.plan || 'fe';
+    const defaults = SECCIONES_DEFAULT[plan] || SECCIONES_DEFAULT.fe;
+
     const contenidoBD = {};
     const contenidoRes = await pool.query(
-      `SELECT seccion_slug, clave, valor FROM contenido_iglesia WHERE iglesia_id = $1`,
+      'SELECT seccion_slug, clave, valor FROM contenido_iglesia WHERE iglesia_id = $1',
       [iglesiaId]
     );
     contenidoRes.rows.forEach(row => {
-      if (!contenidoBD[row.seccion_slug]) contenidoBD[row.seccion_slug] = {};
-      contenidoBD[row.seccion_slug][row.clave] = row.valor;
+      // Solo incluir contenido de secciones activas
+      const activa = mapaActivas[row.seccion_slug] !== undefined ? mapaActivas[row.seccion_slug] : defaults.includes(row.seccion_slug);
+      if (activa) {
+        if (!contenidoBD[row.seccion_slug]) contenidoBD[row.seccion_slug] = {};
+        contenidoBD[row.seccion_slug][row.clave] = row.valor;
+      }
     });
 
     // Usar el mismo transformer del webController
     const { transformarContenido, construirDatos } = getWebController();
     const contenido = transformarContenido(contenidoBD);
     const datos = construirDatos(contenidoBD, iglesia, '');
+    // Marcar secciones inactivas en datos.funcionalidades_activas
+    const funcMap = {
+      horarios: 'horarios_ubicacion', eventos: 'calendario_eventos',
+      predicaciones: 'biblioteca_sermones', transmision: 'transmision_vivo',
+      ministerios: 'ministerios', contacto: 'formulario_contacto',
+      donaciones: 'donaciones', galeria: 'galeria_fotos',
+      nosotros: 'pagina_nuevos_visitantes'
+    };
+    TODAS_LAS_SECCIONES.forEach(slug => {
+      const activa = mapaActivas[slug] !== undefined ? mapaActivas[slug] : defaults.includes(slug);
+      if (!activa && funcMap[slug] && datos.funcionalidades_activas) {
+        datos.funcionalidades_activas[funcMap[slug]] = false;
+      }
+    });
 
     const plantilla = iglesia.plantilla_usada || 'reverente';
     const html = generarHTML(plantilla, datos, contenido);
