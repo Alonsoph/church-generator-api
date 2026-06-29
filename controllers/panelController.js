@@ -154,10 +154,20 @@ const SECCIONES_CONFIG = {
 };
 
 // Secciones disponibles por plan (en orden)
-const SECCIONES_POR_PLAN = {
+const TODAS_LAS_SECCIONES = ['hero', 'horarios', 'nosotros', 'predicaciones', 'eventos', 'ministerios', 'galeria', 'transmision', 'ubicacion', 'contacto', 'donaciones'];
+
+// Secciones activas por defecto al crear iglesia
+const SECCIONES_DEFAULT = {
   fe:      ['hero', 'horarios', 'nosotros', 'predicaciones', 'contacto'],
   mision:  ['hero', 'horarios', 'nosotros', 'predicaciones', 'eventos', 'ministerios', 'transmision', 'contacto'],
   impacto: ['hero', 'horarios', 'nosotros', 'predicaciones', 'eventos', 'ministerios', 'galeria', 'transmision', 'ubicacion', 'contacto', 'donaciones']
+};
+
+// Todos los planes ven las 11 secciones, el limite controla cuantas pueden activar
+const SECCIONES_POR_PLAN = {
+  fe:      TODAS_LAS_SECCIONES,
+  mision:  TODAS_LAS_SECCIONES,
+  impacto: TODAS_LAS_SECCIONES
 };
 
 // ── LOGIN ──
@@ -487,8 +497,8 @@ async function getSecciones(req, res) {
     const secciones = seccionesDelPlan.map(slug => ({
       slug,
       ...SECCIONES_CONFIG[slug],
-      // Si no hay registro en BD, por defecto está activa
-      activa: mapaActivas[slug] !== undefined ? mapaActivas[slug] : true,
+      // Si no hay registro en BD, activa solo si esta en las secciones default del plan
+      activa: mapaActivas[slug] !== undefined ? mapaActivas[slug] : (SECCIONES_DEFAULT[plan] || SECCIONES_DEFAULT.fe).includes(slug),
       incluida_en_plan: true
     }));
 
@@ -521,6 +531,30 @@ async function toggleSeccion(req, res) {
   // No permitir desactivar hero ni contacto
   if (['hero', 'contacto'].includes(seccion_slug)) {
     return res.status(400).json({ error: `La sección '${seccion_slug}' no se puede desactivar` });
+  }
+
+  // Validar limite de secciones activas al activar
+  if (activa !== false) {
+    const limite = LIMITES[plan]?.secciones || 5;
+    const activasActuales = await pool.query(
+      `SELECT COUNT(*) as total FROM secciones_iglesia WHERE iglesia_id = $1 AND activa = true`,
+      [iglesiaId]
+    );
+    // Contar tambien las que no estan en BD (por defecto activas)
+    const seccionesEnBD = await pool.query(
+      `SELECT seccion_slug, activa FROM secciones_iglesia WHERE iglesia_id = $1`,
+      [iglesiaId]
+    );
+    const mapa = {};
+    seccionesEnBD.rows.forEach(r => { mapa[r.seccion_slug] = r.activa; });
+    let totalActivas = 0;
+    TODAS_LAS_SECCIONES.forEach(s => {
+      if (mapa[s] !== undefined) { if (mapa[s]) totalActivas++; }
+    });
+    // Si ya esta en el limite y quiere activar una nueva
+    if (totalActivas >= limite && mapa[seccion_slug] !== true) {
+      return res.status(400).json({ error: 'Has alcanzado el limite de ' + limite + ' secciones activas en tu plan. Desactiva una antes de activar otra.' });
+    }
   }
 
   try {
