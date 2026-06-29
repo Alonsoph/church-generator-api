@@ -779,20 +779,32 @@ async function getPreview(req, res) {
     const { transformarContenido, construirDatos } = getWebController();
     const contenido = transformarContenido(contenidoBD);
     const datos = construirDatos(contenidoBD, iglesia, '');
-    // Marcar secciones inactivas en datos.funcionalidades_activas
+    // Sobrescribir funcionalidades_activas basandose en secciones activas
     const funcMap = {
-      horarios: 'horarios_ubicacion', eventos: 'calendario_eventos',
+      horarios: 'horarios_ubicacion', ubicacion: 'horarios_ubicacion',
+      eventos: 'calendario_eventos',
       predicaciones: 'biblioteca_sermones', transmision: 'transmision_vivo',
       ministerios: 'ministerios', contacto: 'formulario_contacto',
       donaciones: 'donaciones', galeria: 'galeria_fotos',
       nosotros: 'pagina_nuevos_visitantes'
     };
+    // Primero desactivar todo
+    if (datos.funcionalidades_activas) {
+      Object.keys(datos.funcionalidades_activas).forEach(k => {
+        datos.funcionalidades_activas[k] = false;
+      });
+    }
+    // Luego activar solo las secciones activas
     TODAS_LAS_SECCIONES.forEach(slug => {
       const activa = mapaActivas[slug] !== undefined ? mapaActivas[slug] : defaults.includes(slug);
-      if (!activa && funcMap[slug] && datos.funcionalidades_activas) {
-        datos.funcionalidades_activas[funcMap[slug]] = false;
+      if (activa && funcMap[slug] && datos.funcionalidades_activas) {
+        datos.funcionalidades_activas[funcMap[slug]] = true;
       }
     });
+    // Redes sociales siempre activas si hay datos
+    if (datos.funcionalidades_activas) {
+      datos.funcionalidades_activas.redes_sociales = true;
+    }
 
     const plantilla = iglesia.plantilla_usada || 'reverente';
     const html = generarHTML(plantilla, datos, contenido);
