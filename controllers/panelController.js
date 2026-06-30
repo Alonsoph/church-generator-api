@@ -22,7 +22,7 @@ const SECCIONES_CONFIG = {
   hero: {
     nombre: 'Portada principal',
     icono: '🏠',
-    orden: 1,
+    orden: 0,
     campos: [
       { clave: 'nombre_iglesia', tipo: 'text',     label: 'Nombre de la iglesia', requerido: true },
       { clave: 'lema',          tipo: 'text',     label: 'Lema o versículo',      requerido: false },
@@ -30,10 +30,10 @@ const SECCIONES_CONFIG = {
       { clave: 'cta_texto',     tipo: 'text',     label: 'Texto del botón',        requerido: false }
     ]
   },
-  horarios: {
-    nombre: 'Horarios de culto',
+  horarios_ubicacion: {
+    nombre: 'Horarios y Ubicación',
     icono: '🕐',
-    orden: 2,
+    orden: 1,
     campos: [
       { clave: 'horario_1_nombre', tipo: 'text', label: 'Servicio 1 - Nombre' },
       { clave: 'horario_1_dia',   tipo: 'text', label: 'Servicio 1 - Día' },
@@ -43,25 +43,16 @@ const SECCIONES_CONFIG = {
       { clave: 'horario_2_hora',  tipo: 'text', label: 'Servicio 2 - Hora' },
       { clave: 'horario_3_nombre', tipo: 'text', label: 'Servicio 3 - Nombre' },
       { clave: 'horario_3_dia',   tipo: 'text', label: 'Servicio 3 - Día' },
-      { clave: 'horario_3_hora',  tipo: 'text', label: 'Servicio 3 - Hora' }
+      { clave: 'horario_3_hora',  tipo: 'text', label: 'Servicio 3 - Hora' },
+      { clave: 'direccion',       tipo: 'text', label: 'Dirección completa' },
+      { clave: 'ciudad',          tipo: 'text', label: 'Ciudad / Comuna' },
+      { clave: 'mapa_url',        tipo: 'text', label: 'Link Google Maps (opcional)' }
     ]
   },
-  nosotros: {
-    nombre: 'Quiénes somos',
-    icono: '✝️',
-    orden: 3,
-    campos: [
-      { clave: 'historia',  tipo: 'textarea', label: 'Historia de la iglesia' },
-      { clave: 'vision',    tipo: 'textarea', label: 'Visión' },
-      { clave: 'mision',    tipo: 'textarea', label: 'Misión' },
-      { clave: 'pastor',    tipo: 'text',     label: 'Nombre del pastor principal' },
-      { clave: 'foto_pastor', tipo: 'image_url', label: 'Foto del pastor (URL)' }
-    ]
-  },
-  predicaciones: {
+  biblioteca_sermones: {
     nombre: 'Predicaciones',
     icono: '🎙️',
-    orden: 4,
+    orden: 2,
     campos: [
       { clave: 'pred_1_titulo',     tipo: 'text', label: 'Predicación 1 - Título' },
       { clave: 'pred_1_predicador', tipo: 'text', label: 'Predicación 1 - Predicador' },
@@ -74,10 +65,10 @@ const SECCIONES_CONFIG = {
       { clave: 'pred_3_url',        tipo: 'text', label: 'Predicación 3 - Link YouTube' }
     ]
   },
-  eventos: {
+  calendario_eventos: {
     nombre: 'Eventos',
     icono: '📅',
-    orden: 5,
+    orden: 3,
     campos: [
       { clave: 'evento_1_titulo', tipo: 'text', label: 'Evento 1 - Título' },
       { clave: 'evento_1_fecha',  tipo: 'text', label: 'Evento 1 - Fecha (ej: 15 JUN)' },
@@ -87,69 +78,55 @@ const SECCIONES_CONFIG = {
       { clave: 'evento_2_hora',   tipo: 'text', label: 'Evento 2 - Hora' }
     ]
   },
+  transmision_vivo: {
+    nombre: 'Transmisión en Vivo',
+    icono: '📡',
+    orden: 4,
+    campos: [
+      { clave: 'youtube_canal',  tipo: 'text', label: 'URL canal YouTube' },
+      { clave: 'youtube_video',  tipo: 'text', label: 'ID video en vivo (ej: dQw4w9WgXcQ)' }
+    ]
+  },
   ministerios: {
     nombre: 'Ministerios',
     icono: '🙌',
-    orden: 6,
+    orden: 5,
     campos: [
       { clave: 'min_1_nombre', tipo: 'text',     label: 'Ministerio 1 - Nombre' },
       { clave: 'min_1_desc',   tipo: 'textarea', label: 'Ministerio 1 - Descripción' },
       { clave: 'min_2_nombre', tipo: 'text',     label: 'Ministerio 2 - Nombre' },
       { clave: 'min_2_desc',   tipo: 'textarea', label: 'Ministerio 2 - Descripción' },
       { clave: 'min_3_nombre', tipo: 'text',     label: 'Ministerio 3 - Nombre' },
-      { clave: 'min_3_desc',   tipo: 'textarea', label: 'Ministerio 3 - Descripción' },
-      { clave: 'min_4_nombre', tipo: 'text',     label: 'Ministerio 4 - Nombre' },
-      { clave: 'min_4_desc',   tipo: 'textarea', label: 'Ministerio 4 - Descripción' }
+      { clave: 'min_3_desc',   tipo: 'textarea', label: 'Ministerio 3 - Descripción' }
     ]
   },
-  galeria: {
-    nombre: 'Galería de fotos',
-    icono: '🖼️',
-    orden: 7,
-    campos: [] // Gestión especial vía endpoint /foto
-  },
-  transmision: {
-    nombre: 'Transmisión en vivo',
-    icono: '📺',
-    orden: 8,
-    campos: [
-      { clave: 'youtube_canal',    tipo: 'text', label: 'URL del canal de YouTube' },
-      { clave: 'youtube_video_id', tipo: 'text', label: 'ID del último video (ej: dQw4w9WgXcQ)' },
-      { clave: 'transmision_nota', tipo: 'text', label: 'Nota de horario (ej: Domingos 10:00 AM)' }
-    ]
-  },
-  ubicacion: {
-    nombre: 'Ubicación',
-    icono: '📍',
-    orden: 9,
-    campos: [
-      { clave: 'direccion', tipo: 'text', label: 'Dirección completa', requerido: true }
-    ]
-  },
-  contacto: {
+  formulario_contacto: {
     nombre: 'Contacto',
     icono: '📞',
-    orden: 10,
+    orden: 6,
     campos: [
-      { clave: 'telefono',   tipo: 'text',  label: 'WhatsApp (con código país, ej: 56912345678)' },
-      { clave: 'email',      tipo: 'email', label: 'Email de contacto' }
+      { clave: 'telefono', tipo: 'text',  label: 'WhatsApp (con código país, ej: 56912345678)' },
+      { clave: 'email',    tipo: 'email', label: 'Email de contacto' }
     ]
   },
-  redes: {
-    nombre: 'Redes Sociales',
-    icono: '🌐',
-    orden: 11,
+  pagina_nuevos_visitantes: {
+    nombre: 'Nuevos Visitantes',
+    icono: '👋',
+    orden: 7,
     campos: [
-      { clave: 'facebook',   tipo: 'text',  label: 'URL Facebook' },
-      { clave: 'instagram',  tipo: 'text',  label: 'URL Instagram' },
-      { clave: 'youtube',    tipo: 'text',  label: 'URL YouTube' },
-      { clave: 'tiktok',     tipo: 'text',  label: 'URL TikTok' }
+      { clave: 'bienvenida_titulo',  tipo: 'text',     label: 'Título de bienvenida' },
+      { clave: 'bienvenida_texto',   tipo: 'textarea', label: 'Mensaje de bienvenida' },
+      { clave: 'historia',           tipo: 'textarea', label: 'Historia de la iglesia' },
+      { clave: 'vision',             tipo: 'textarea', label: 'Visión' },
+      { clave: 'mision',             tipo: 'textarea', label: 'Misión' },
+      { clave: 'pastor',             tipo: 'text',     label: 'Nombre del pastor principal' },
+      { clave: 'foto_pastor',        tipo: 'image_url', label: 'Foto del pastor (URL)' }
     ]
   },
   donaciones: {
     nombre: 'Donaciones',
     icono: '💝',
-    orden: 12,
+    orden: 8,
     campos: [
       { clave: 'banco',            tipo: 'text',  label: 'Banco' },
       { clave: 'numero_cuenta',    tipo: 'text',  label: 'Número de cuenta' },
@@ -158,17 +135,44 @@ const SECCIONES_CONFIG = {
       { clave: 'rut',              tipo: 'text',  label: 'RUT del titular' },
       { clave: 'email_donaciones', tipo: 'email', label: 'Email para transferencias' }
     ]
+  },
+  galeria_fotos: {
+    nombre: 'Galería de Fotos',
+    icono: '📸',
+    orden: 9,
+    campos: []
+  },
+  blog_devocionales: {
+    nombre: 'Blog / Devocionales',
+    icono: '📝',
+    orden: 10,
+    campos: [
+      { clave: 'devo_1_titulo',  tipo: 'text',     label: 'Devocional 1 - Título' },
+      { clave: 'devo_1_texto',   tipo: 'textarea', label: 'Devocional 1 - Contenido' },
+      { clave: 'devo_2_titulo',  tipo: 'text',     label: 'Devocional 2 - Título' },
+      { clave: 'devo_2_texto',   tipo: 'textarea', label: 'Devocional 2 - Contenido' }
+    ]
+  },
+  redes_sociales: {
+    nombre: 'Redes Sociales',
+    icono: '🌐',
+    orden: 11,
+    campos: [
+      { clave: 'facebook',  tipo: 'text', label: 'URL Facebook' },
+      { clave: 'instagram', tipo: 'text', label: 'URL Instagram' },
+      { clave: 'youtube',   tipo: 'text', label: 'URL YouTube' },
+      { clave: 'tiktok',    tipo: 'text', label: 'URL TikTok' }
+    ]
   }
 };
-
 // Secciones disponibles por plan (en orden)
-const TODAS_LAS_SECCIONES = ['horarios', 'nosotros', 'predicaciones', 'eventos', 'ministerios', 'galeria', 'transmision', 'ubicacion', 'contacto', 'redes', 'donaciones'];
+const TODAS_LAS_SECCIONES = ['horarios_ubicacion', 'biblioteca_sermones', 'calendario_eventos', 'transmision_vivo', 'ministerios', 'formulario_contacto', 'pagina_nuevos_visitantes', 'donaciones', 'galeria_fotos', 'blog_devocionales', 'redes_sociales'];
 
 // Secciones activas por defecto al crear iglesia
 const SECCIONES_DEFAULT = {
-  fe:      ['horarios', 'nosotros', 'predicaciones', 'contacto', 'redes'],
-  mision:  ['horarios', 'nosotros', 'predicaciones', 'eventos', 'ministerios', 'transmision', 'contacto', 'redes'],
-  impacto: ['horarios', 'nosotros', 'predicaciones', 'eventos', 'ministerios', 'galeria', 'transmision', 'ubicacion', 'contacto', 'redes', 'donaciones']
+  fe:      ['horarios_ubicacion', 'biblioteca_sermones', 'formulario_contacto', 'redes_sociales', 'pagina_nuevos_visitantes'],
+  mision:  ['horarios_ubicacion', 'biblioteca_sermones', 'calendario_eventos', 'transmision_vivo', 'ministerios', 'formulario_contacto', 'redes_sociales', 'pagina_nuevos_visitantes'],
+  impacto: ['horarios_ubicacion', 'biblioteca_sermones', 'calendario_eventos', 'transmision_vivo', 'ministerios', 'formulario_contacto', 'pagina_nuevos_visitantes', 'donaciones', 'galeria_fotos', 'blog_devocionales', 'redes_sociales']
 };
 
 // Todos los planes ven las 11 secciones, el limite controla cuantas pueden activar
@@ -799,31 +803,17 @@ async function getPreview(req, res) {
     const contenido = transformarContenido(contenidoBD);
     const datos = construirDatos(contenidoBD, iglesia, '');
     // Sobrescribir funcionalidades_activas basandose en secciones activas
-    const funcMap = {
-      horarios: 'horarios_ubicacion', ubicacion: 'horarios_ubicacion',
-      eventos: 'calendario_eventos',
-      predicaciones: 'biblioteca_sermones', transmision: 'transmision_vivo',
-      ministerios: 'ministerios', contacto: 'formulario_contacto',
-      donaciones: 'donaciones', galeria: 'galeria_fotos',
-      redes: 'redes_sociales',
-      nosotros: 'pagina_nuevos_visitantes'
-    };
-    // Primero desactivar todo
+    // Los slugs ahora coinciden con las func keys de la plantilla
     if (datos.funcionalidades_activas) {
       Object.keys(datos.funcionalidades_activas).forEach(k => {
         datos.funcionalidades_activas[k] = false;
       });
-    }
-    // Luego activar solo las secciones activas
-    TODAS_LAS_SECCIONES.forEach(slug => {
-      const activa = mapaActivas[slug] !== undefined ? mapaActivas[slug] : defaults.includes(slug);
-      if (activa && funcMap[slug] && datos.funcionalidades_activas) {
-        datos.funcionalidades_activas[funcMap[slug]] = true;
-      }
-    });
-    // Redes sociales siempre activas si hay datos
-    if (datos.funcionalidades_activas) {
-      datos.funcionalidades_activas.redes_sociales = true;
+      TODAS_LAS_SECCIONES.forEach(slug => {
+        const activa = mapaActivas[slug] !== undefined ? mapaActivas[slug] : defaults.includes(slug);
+        if (activa) {
+          datos.funcionalidades_activas[slug] = true;
+        }
+      });
     }
 
     const plantilla = iglesia.plantilla_usada || 'reverente';
