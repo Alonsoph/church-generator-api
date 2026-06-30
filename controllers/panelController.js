@@ -132,16 +132,24 @@ const SECCIONES_CONFIG = {
     orden: 10,
     campos: [
       { clave: 'telefono',   tipo: 'text',  label: 'WhatsApp (con código país, ej: 56912345678)' },
-      { clave: 'email',      tipo: 'email', label: 'Email de contacto' },
+      { clave: 'email',      tipo: 'email', label: 'Email de contacto' }
+    ]
+  },
+  redes: {
+    nombre: 'Redes Sociales',
+    icono: '🌐',
+    orden: 11,
+    campos: [
       { clave: 'facebook',   tipo: 'text',  label: 'URL Facebook' },
       { clave: 'instagram',  tipo: 'text',  label: 'URL Instagram' },
-      { clave: 'youtube',    tipo: 'text',  label: 'URL YouTube' }
+      { clave: 'youtube',    tipo: 'text',  label: 'URL YouTube' },
+      { clave: 'tiktok',     tipo: 'text',  label: 'URL TikTok' }
     ]
   },
   donaciones: {
     nombre: 'Donaciones',
     icono: '💝',
-    orden: 11,
+    orden: 12,
     campos: [
       { clave: 'banco',            tipo: 'text',  label: 'Banco' },
       { clave: 'numero_cuenta',    tipo: 'text',  label: 'Número de cuenta' },
@@ -154,13 +162,13 @@ const SECCIONES_CONFIG = {
 };
 
 // Secciones disponibles por plan (en orden)
-const TODAS_LAS_SECCIONES = ['hero', 'horarios', 'nosotros', 'predicaciones', 'eventos', 'ministerios', 'galeria', 'transmision', 'ubicacion', 'contacto', 'donaciones'];
+const TODAS_LAS_SECCIONES = ['horarios', 'nosotros', 'predicaciones', 'eventos', 'ministerios', 'galeria', 'transmision', 'ubicacion', 'contacto', 'redes', 'donaciones'];
 
 // Secciones activas por defecto al crear iglesia
 const SECCIONES_DEFAULT = {
-  fe:      ['hero', 'horarios', 'nosotros', 'predicaciones', 'contacto'],
-  mision:  ['hero', 'horarios', 'nosotros', 'predicaciones', 'eventos', 'ministerios', 'transmision', 'contacto'],
-  impacto: ['hero', 'horarios', 'nosotros', 'predicaciones', 'eventos', 'ministerios', 'galeria', 'transmision', 'ubicacion', 'contacto', 'donaciones']
+  fe:      ['horarios', 'nosotros', 'predicaciones', 'contacto', 'redes'],
+  mision:  ['horarios', 'nosotros', 'predicaciones', 'eventos', 'ministerios', 'transmision', 'contacto', 'redes'],
+  impacto: ['horarios', 'nosotros', 'predicaciones', 'eventos', 'ministerios', 'galeria', 'transmision', 'ubicacion', 'contacto', 'redes', 'donaciones']
 };
 
 // Todos los planes ven las 11 secciones, el limite controla cuantas pueden activar
@@ -494,13 +502,24 @@ async function getSecciones(req, res) {
     const mapaActivas = {};
     activasDB.rows.forEach(r => { mapaActivas[r.seccion_slug] = r.activa; });
 
-    const secciones = seccionesDelPlan.map(slug => ({
+    // Hero siempre fija al inicio
+    const heroSeccion = {
+      slug: 'hero',
+      ...SECCIONES_CONFIG.hero,
+      activa: true,
+      fija: true,
+      incluida_en_plan: true
+    };
+
+    const seccionesVariables = seccionesDelPlan.map(slug => ({
       slug,
       ...SECCIONES_CONFIG[slug],
-      // Si no hay registro en BD, activa solo si esta en las secciones default del plan
       activa: mapaActivas[slug] !== undefined ? mapaActivas[slug] : (SECCIONES_DEFAULT[plan] || SECCIONES_DEFAULT.fe).includes(slug),
+      fija: false,
       incluida_en_plan: true
     }));
+
+    const secciones = [heroSeccion, ...seccionesVariables];
 
     res.json({
       secciones,
@@ -529,7 +548,7 @@ async function toggleSeccion(req, res) {
   }
 
   // No permitir desactivar hero ni contacto
-  if (['hero', 'contacto'].includes(seccion_slug)) {
+  if (['hero'].includes(seccion_slug)) {
     return res.status(400).json({ error: `La sección '${seccion_slug}' no se puede desactivar` });
   }
 
@@ -786,6 +805,7 @@ async function getPreview(req, res) {
       predicaciones: 'biblioteca_sermones', transmision: 'transmision_vivo',
       ministerios: 'ministerios', contacto: 'formulario_contacto',
       donaciones: 'donaciones', galeria: 'galeria_fotos',
+      redes: 'redes_sociales',
       nosotros: 'pagina_nuevos_visitantes'
     };
     // Primero desactivar todo
