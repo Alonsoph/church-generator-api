@@ -730,8 +730,8 @@ async function cambiarPlantilla(req, res) {
   const { plantilla } = req.body;
 
   const plantillasDisponibles = {
-    fe:      ['reverente'],
-    mision:  ['reverente', 'contemporanea', 'acogedora'],
+    fe:      ['reverente', 'contemporanea', 'acogedora', 'catedral', 'transmision', 'mision', 'plaza'],
+    mision:  ['reverente', 'contemporanea', 'acogedora', 'catedral', 'transmision', 'mision', 'plaza'],
     impacto: ['reverente', 'contemporanea', 'acogedora', 'catedral', 'transmision', 'mision', 'plaza']
   };
 
