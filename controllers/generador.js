@@ -501,6 +501,14 @@ exports.aprobarIglesia = async (req, res) => {
       ]
     );
 
+    // Sembrar secciones del catalogo para que el panel del pastor no aparezca vacio
+    await pool.query(
+      `INSERT INTO secciones_iglesia (iglesia_id, seccion_slug, activa)
+       SELECT $1, slug, true FROM secciones_catalogo
+       ON CONFLICT DO NOTHING`,
+      [result.rows[0].id]
+    );
+
     res.json({
       exito: true,
       id: result.rows[0].id,

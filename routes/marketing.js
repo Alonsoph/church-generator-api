@@ -91,6 +91,14 @@ router.post("/generar-lote", async (req, res) => {
           [ig.nombre, `Demo lote GLM-5.2 - ${ig.comuna} - plantilla: ${plantilla}`, html]
         );
 
+        // Sembrar secciones del catalogo para el panel
+        await pool.query(
+          `INSERT INTO secciones_iglesia (iglesia_id, seccion_slug, activa)
+           SELECT $1, slug, true FROM secciones_catalogo
+           ON CONFLICT DO NOTHING`,
+          [insertResult.rows[0].id]
+        );
+
         resultados.push({
           id: insertResult.rows[0].id,
           nombre: ig.nombre,
