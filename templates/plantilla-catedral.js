@@ -483,7 +483,14 @@ body {
   justify-content: space-between;
 }
 
-.logo { height: 50px; width: auto; }
+.logo {
+  height: 56px;
+  width: auto;
+  max-width: 180px;
+  object-fit: contain;
+  border-radius: 8px;
+  padding: 4px;
+}
 
 .logo-text {
   font-family: 'Cormorant Garamond', serif;
