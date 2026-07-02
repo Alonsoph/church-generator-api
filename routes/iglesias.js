@@ -9,7 +9,8 @@ router.post('/generar', generador.generarPagina);
 router.post('/cambiar-plantilla', generador.cambiarPlantilla);
 router.get('/preview', generador.mostrarPreview);
 router.post('/aprobar', generador.aprobarIglesia);
-router.get('/web/:id', generador.servirWebIglesia);
+const { servirWebPorId } = require('../controllers/webController');
+router.get('/web/:id', servirWebPorId);
 
 // Admin (protegidos con token)
 router.get('/admin/pendientes',       adminAuth, generador.listarPendientes);
