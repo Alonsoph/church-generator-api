@@ -124,12 +124,11 @@ async function servirWebPorDominio(req, res) {
     if (result.rows.length === 0) return res.status(404).send('<h1>Iglesia no encontrada</h1>');
     const iglesia = result.rows[0];
 
-    // Logo OG: primero buscar en contenido, luego fallback por ID
-    const logoOG = iglesia.id === 34
-      ? 'https://tuwebiglesia.cl/logo-casa-de-dios.png'
-      : 'https://tuwebiglesia.cl/og-default.jpg';
-    
     const contenidoBD = await getContenido(iglesia.id);
+
+    // Logo: primero desde la BD (panel del pastor), luego fallback por ID, luego default
+    const logoOG = contenidoBD.hero?.logo
+      || (iglesia.id === 34 ? 'https://tuwebiglesia.cl/logo-casa-de-dios.png' : 'https://tuwebiglesia.cl/og-default.jpg');
     const contenido = transformarContenido(contenidoBD);
     const datos = construirDatos(contenidoBD, iglesia, logoOG);
     const plantilla = iglesia.plantilla_usada || 'reverente';
@@ -155,12 +154,11 @@ async function servirWebPorId(req, res) {
     if (result.rows.length === 0) return res.status(404).send('No encontrada');
     const iglesia = result.rows[0];
 
-    // Logo OG: primero buscar en contenido, luego fallback por ID
-    const logoOG = iglesia.id === 34
-      ? 'https://tuwebiglesia.cl/logo-casa-de-dios.png'
-      : 'https://tuwebiglesia.cl/og-default.jpg';
-    
     const contenidoBD = await getContenido(iglesia.id);
+
+    // Logo: primero desde la BD (panel del pastor), luego fallback por ID, luego default
+    const logoOG = contenidoBD.hero?.logo
+      || (iglesia.id === 34 ? 'https://tuwebiglesia.cl/logo-casa-de-dios.png' : 'https://tuwebiglesia.cl/og-default.jpg');
     const contenido = transformarContenido(contenidoBD);
     const datos = construirDatos(contenidoBD, iglesia, logoOG);
     const plantilla = iglesia.plantilla_usada || 'reverente';

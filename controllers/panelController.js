@@ -26,7 +26,8 @@ const SECCIONES_CONFIG = {
     campos: [
       { clave: 'nombre_iglesia', tipo: 'text',     label: 'Nombre de la iglesia', requerido: true },
       { clave: 'lema',          tipo: 'text',     label: 'Lema o versículo',      requerido: false },
-      { clave: 'foto_portada',  tipo: 'image_url', label: 'Foto de portada (URL)', requerido: false },
+      { clave: 'logo',          tipo: 'image_url', label: 'Logo de la iglesia',    requerido: false },
+      { clave: 'foto_portada',  tipo: 'image_url', label: 'Foto de portada',        requerido: false },
       { clave: 'cta_texto',     tipo: 'text',     label: 'Texto del botón',        requerido: false }
     ]
   },
