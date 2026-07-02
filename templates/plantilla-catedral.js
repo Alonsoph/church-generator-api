@@ -483,6 +483,7 @@ body {
   justify-content: space-between;
 }
 
+/* v2-logo-fix */
 .logo {
   height: 56px;
   width: auto;
